@@ -2,6 +2,7 @@
 
 clean:
 	rm -rf vendor
+	rm -rf $(GOPATH)/bin/saku
 
 build:
 	go build -o saku
