@@ -1,4 +1,4 @@
-# saku (作) 0.1.0
+# saku (作) v0.1.0
 
 > Markdown-based task runner
 

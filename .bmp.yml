@@ -1,0 +1,6 @@
+---
+version: 0.1.0
+commit: 'chore: bump to version %.%.%'
+files:
+  README.md: v%.%.%
+  version.go: '%.%.%'

@@ -12,6 +12,8 @@ func main() {
 	app.Name = "saku"
 	app.Usage = "Markdown-based task runner"
 
+	app.Version = Version
+
 	err := app.Run(os.Args)
 
 	if err != nil {
