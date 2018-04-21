@@ -1,9 +1,11 @@
 .PHONY: clean build test fmt cov chglog
 
-test:
+integration-test:
 	go build -o saku
 	./saku
-	# go test -v .
+
+test:
+	go test -v .
 
 clean:
 	rm -rf vendor
