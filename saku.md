@@ -11,7 +11,12 @@
 # test
 > Runs the tests
 
-    go test -v
+    go test -v .
+
+# fix
+> Format source code
+
+    go fmt
 
 # cov
 > Takes the coverage data
