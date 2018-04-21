@@ -1,14 +1,16 @@
 .PHONY: clean build test fmt cov chglog
 
+test:
+	go build -o saku
+	./saku
+	# go test -v .
+
 clean:
 	rm -rf vendor
 	rm -rf $(GOPATH)/bin/saku
 
 build:
 	go build -o saku
-
-test:
-	go test -v .
 
 fmt:
 	go fmt

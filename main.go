@@ -8,7 +8,12 @@ import (
 )
 
 func main() {
-	err := cli.NewApp().Run(os.Args)
+	app := cli.NewApp()
+	app.Name = "saku"
+	app.Usage = "Markdown-based task runner"
+
+	err := app.Run(os.Args)
+
 	if err != nil {
 		log.Fatal(err)
 	}
