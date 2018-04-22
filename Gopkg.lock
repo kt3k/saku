@@ -2,6 +2,15 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/simonleung8/flags"
+  packages = [
+    ".",
+    "flag"
+  ]
+  revision = "8020ed7bcf1abe08c0cd87cce903667f681b450a"
+
+[[projects]]
   name = "github.com/urfave/cli"
   packages = ["."]
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
@@ -10,6 +19,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "df4a79a3008603763e1d51475bb94e1290af5af71be4761ef9369093fcce7009"
+  inputs-digest = "9e76ab5e3c5a373a08e0d501f8dd15aecdce1ab103720be98c52ecc096a41eda"
   solver-name = "gps-cdcl"
   solver-version = 1

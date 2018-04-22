@@ -1,54 +1,30 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
-	"github.com/urfave/cli"
+	"github.com/simonleung8/flags"
 )
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "saku"
-	app.Usage = "Markdown-based task runner"
+	fc := flags.New()
 
-	app.Version = Version
+	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
+	fc.NewBoolFlag("version", "v", "")
+	fc.NewBoolFlag("parallel", "p", "Runs tasks in parallel.")
+	fc.NewBoolFlag("race", "r", "")
+	fc.NewBoolFlag("serial", "s", "")
+	fc.NewStringFlagWithDefault("config", "c", "", "saku.md")
 
-	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "i, info",
-			Usage: "show the task information and exits",
-		},
-
-		cli.BoolFlag{
-			Name:  "p, parallel",
-			Usage: "run tasks in parallel",
-		},
-
-		cli.BoolFlag{
-			Name:  "r, race",
-			Usage: "set the flag to kill all tasks when a task finished with zero. This option is valid only with 'parallel' option",
-		},
-
-		cli.BoolFlag{
-			Name:  "s, serial",
-			Usage: "runs tasks sequentially",
-		},
-
-		cli.BoolFlag{
-			Name:  "q, quiet",
-			Usage: "stop logging",
-		},
-
-		cli.StringFlag{
-			Name: "c, config",
-			Usage: "Specifies the config file. Default is 'saku.md'.",
-		},
-	}
-
-	err := app.Run(os.Args)
+	err := fc.Parse()
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error:", err)
+		os.Exit(StatusCodeError)
 	}
+
+	fmt.Println("hello from saku")
+	fmt.Println("Args", fc.Args())
+	fmt.Println("help", fc.Bool("help))
 }
