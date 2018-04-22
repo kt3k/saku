@@ -6,7 +6,7 @@
 
 # :cd: Install
 
-    go get -u github.com/kt3k/go-saku/cmd/saku
+    go get -u github.com/kt3k/saku
 
 # Usage
 
