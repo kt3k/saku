@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/fatih/color"
 )
 
 // Shows the help message.
 func Usage() {
-	fmt.Println(`
-  Usage: saku [options] <task, ...> [-- extra-options]
+	fmt.Printf(`
+  Usage: %s [options] <task, ...> [-- extra-options]
 
   Options:
     -v, --version   - - - Shows the version number and exits.
@@ -22,5 +24,6 @@ func Usage() {
     -q, --quiet   - - - - Stops the logging.
 
   The extra options after '--' are passed to each task command.
-`)
+
+`, color.CyanString("saku"))
 }
