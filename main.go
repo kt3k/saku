@@ -30,7 +30,7 @@ func main() {
 	}
 
 	if fc.Bool("version") {
-		fmt.Println("saku", Version)
+		fmt.Printf("saku@%s\n", Version)
 		os.Exit(ExitCodeOk)
 	}
 
