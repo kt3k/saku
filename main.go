@@ -17,14 +17,23 @@ func main() {
 	fc.NewBoolFlag("serial", "s", "")
 	fc.NewStringFlagWithDefault("config", "c", "", "saku.md")
 
-	err := fc.Parse()
+	err := fc.Parse(os.Args...)
 
 	if err != nil {
 		fmt.Println("Error:", err)
-		os.Exit(StatusCodeError)
+		os.Exit(ExitCodeError)
 	}
 
-	fmt.Println("hello from saku")
-	fmt.Println("Args", fc.Args())
-	fmt.Println("help", fc.Bool("help))
+	if fc.Bool("help") {
+		Usage()
+		os.Exit(ExitCodeOk)
+	}
+
+	if fc.Bool("version") {
+		fmt.Println("saku", Version)
+		os.Exit(ExitCodeOk)
+	}
+
+	tasks := ParseTasks()
+	tasks.Run()
 }
