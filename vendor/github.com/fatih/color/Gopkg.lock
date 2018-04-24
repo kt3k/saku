@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/fatih/color"
-  packages = ["."]
-  revision = "507f6050b8568533fb3f5504de8e5205fa62a114"
-  version = "v1.6.0"
-
-[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -20,22 +14,14 @@
   version = "v0.0.3"
 
 [[projects]]
-  name = "github.com/simonleung8/flags"
-  packages = [
-    ".",
-    "flag"
-  ]
-  revision = "8020ed7bcf1abe08c0cd87cce903667f681b450a"
-
-[[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "79b0c6888797020a994db17c8510466c72fe75d9"
+  revision = "37707fdb30a5b38865cfb95e5aab41707daec7fd"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "03f1dd22fb91714a87e6b7b3c88b398dbe22e58e2f681e2cec69377a2be139ba"
+  inputs-digest = "e8a50671c3cb93ea935bf210b1cd20702876b9d9226129be581ef646d1565cdc"
   solver-name = "gps-cdcl"
   solver-version = 1

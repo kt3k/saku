@@ -1,6 +1,10 @@
 [[constraint]]
-  name = "github.com/urfave/cli"
-  version = "1.20.0"
+  name = "github.com/simonleung8/flags"
+	revision = "8020ed7bcf1abe08c0cd87cce903667f681b450a"
+
+[[constraint]]
+  name = "github.com/fatih/color"
+	version = "1.6.0"
 
 [prune]
   go-tests = true
