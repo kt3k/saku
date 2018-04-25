@@ -34,6 +34,15 @@ func main() {
 		os.Exit(ExitCodeOk)
 	}
 
+	md, err1 := ReadConfig()
+
+	if err1 != nil {
+		fmt.Println("Error: File not found: saku.md")
+		os.Exit(ExitCodeOk)
+	}
+
+	fmt.Println(md)
+
 	tasks := ParseTasks()
 
 	err0 := tasks.Run()
