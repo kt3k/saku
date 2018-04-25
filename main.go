@@ -35,5 +35,11 @@ func main() {
 	}
 
 	tasks := ParseTasks()
-	tasks.Run()
+
+	err0 := tasks.Run()
+
+	if err0 != nil {
+		fmt.Println("Error:", err0)
+		os.Exit(ExitCodeOk)
+	}
 }
