@@ -1,8 +1,10 @@
-# saku (作) v0.1.0
+# saku (作) v0.1.0 WIP
 
 > Markdown-based task runner
 
 `saku` is a simple task runner based on markdown syntax. You can define and describe your tasks in markdown file `saku.md` and execute them with `saku` command.
+
+This repository is WIP port of [node-saku][].
 
 # :cd: Install
 
@@ -145,7 +147,8 @@ Saku is the Japanese name for the Chinese character "作", which means "make". S
 
 # Prior Art
 
-- [js-saku][]
+- [node-saku][]
+  - the original implementation of saku in JavaScript
 - [make][]
 - [npm-run-all][] by @mysticatea
 - yaml-based tools
@@ -164,4 +167,4 @@ MIT
 [npm-run-all]: https://github.com/mysticatea/npm-run-all
 [robo]: https://github.com/tj/robo
 [go-task]: https://github.com/go-task/task
-[js-saku]: https://github.com/kt3k/saku
+[node-saku]: https://github.com/kt3k/node-saku
