@@ -8,8 +8,8 @@ type Task struct {
 	aborted     bool
 }
 
-func NewTask() *Task {
-	return &Task{
+func NewTask() Task {
+	return Task{
 		title:       "",
 		description: "",
 		commands:    []string{},
