@@ -7,7 +7,7 @@ import (
 )
 
 // Reads task config from markdown files
-func ReadConfig() ([]byte, error) {
+func readConfig() ([]byte, error) {
 	data, err := ioutil.ReadFile("saku.md")
 
 	if err != nil {

@@ -1,5 +1,5 @@
 package main
 
-type RunOptions struct {
+type runOptions struct {
 	cwd string
 }

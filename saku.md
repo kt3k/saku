@@ -1,6 +1,5 @@
 # clean
 > Cleans the workspace
-> Foo
 
     rm -rf vendor
 
@@ -22,8 +21,17 @@
 # cov
 > Takes the coverage data
 
+> Foo
+> Bar
+
     echo goverage -coverprofile=cover.out `go list ./... | grep -v /vendor/`
+
+> Baz
+
+
     echo go tool cover -func=cover.out
+
+
     echo rm -rf cover.out
 
 # changelog

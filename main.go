@@ -21,32 +21,32 @@ func main() {
 
 	if err != nil {
 		fmt.Println("Error:", err)
-		os.Exit(ExitCodeError)
+		os.Exit(exitCodeError)
 	}
 
 	if fc.Bool("help") {
-		Usage()
-		os.Exit(ExitCodeOk)
+		usage()
+		os.Exit(exitCodeOk)
 	}
 
 	if fc.Bool("version") {
 		fmt.Printf("saku@%s\n", Version)
-		os.Exit(ExitCodeOk)
+		os.Exit(exitCodeOk)
 	}
 
-	config, err1 := ReadConfig()
+	config, err1 := readConfig()
 
 	if err1 != nil {
 		fmt.Println("Error: File not found: saku.md")
-		os.Exit(ExitCodeOk)
+		os.Exit(exitCodeOk)
 	}
 
-	tasks := ParseConfig(&config)
+	tasks := parseConfig(&config)
 
-	err0 := tasks.Run()
+	err0 := tasks.run()
 
 	if err0 != nil {
 		fmt.Println("Error:", err0)
-		os.Exit(ExitCodeOk)
+		os.Exit(exitCodeOk)
 	}
 }

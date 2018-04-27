@@ -1,9 +1,9 @@
 package main
 
-type TaskError struct {
+type taskError struct {
 	message string
 }
 
-func (e *TaskError) Error() string {
+func (e *taskError) Error() string {
 	return e.message
 }

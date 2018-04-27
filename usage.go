@@ -7,7 +7,7 @@ import (
 )
 
 // Shows the help message.
-func Usage() {
+func usage() {
 	fmt.Printf(`
   Usage: %s [options] <task, ...> [-- extra-options]
 

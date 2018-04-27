@@ -1,53 +1,53 @@
 package main
 
-type Task struct {
+type task struct {
 	title       string
 	description string
 	commands    []string
-	options     TaskOptions
+	options     taskOptions
 	aborted     bool
 }
 
-func NewTask() Task {
-	return Task{
+func newTask() task {
+	return task{
 		title:       "",
 		description: "",
 		commands:    []string{},
-		options:     TaskOptions{},
+		options:     taskOptions{},
 		aborted:     false,
 	}
 }
 
-type TaskOptions struct {
+type taskOptions struct {
 }
 
 // Runs a single command
-func (*Task) RunSingle(command string) {
+func (*task) runSingle(command string) {
 }
 
 // Runs a task
-func (t *Task) Run(opts *RunOptions) {
+func (t *task) Run(opts *runOptions) {
 	// TODO: runs all commands
 }
 
 // Aborts a task
-func (t *Task) Abort() {
+func (t *task) abort() {
 	if t.aborted {
 		return
 	}
 }
 
 // Adds the description.
-func (t *Task) AddDescription(description string) {
+func (t *task) addDescription(description string) {
 	t.description = t.description + description
 }
 
 // Sets the title.
-func (t *Task) SetTitle(title string) {
+func (t *task) setTitle(title string) {
 	t.title = title
 }
 
 // Adds the code.
-func (t *Task) AddCommands(commands []string) {
+func (t *task) addCommands(commands []string) {
 	t.commands = append(t.commands, commands...)
 }

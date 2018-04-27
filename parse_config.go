@@ -5,21 +5,32 @@ import (
 )
 
 // Parses config markdown and returns tasks.
-func ParseConfig(config *[]byte) TaskCollection {
-	tasks := TaskCollection{tasks: []Task{}}
+func parseConfig(config *[]byte) taskCollection {
+	tasks := taskCollection{tasks: []task{}}
 
 	node := blackfriday.New().Parse(*config).FirstChild
 
 	for node != nil {
 		if node.Type == blackfriday.Heading {
 			/* Heading > Text */
-			println("Heading=" + string(node.FirstChild.Literal))
+			title := string(node.FirstChild.Literal)
+			println("Heading=" + title)
 		} else if node.Type == blackfriday.BlockQuote {
 			/* BlockQuote > Paragraph > Text */
-			println("BlockQuote=" + string(node.FirstChild.FirstChild.Literal))
+			p := node.FirstChild
+
+			for p != nil {
+				description := p.FirstChild.Literal
+				println("BlockQuote=" + string(description))
+
+				p = p.Next
+			}
 		} else if node.Type == blackfriday.CodeBlock {
 			/* CodeBlock > Text */
 			println("CodeBlock=" + string(node.Literal))
+		} else {
+			println(string(node.Literal))
+			println(string(node.String()))
 		}
 
 		node = node.Next

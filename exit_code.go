@@ -1,6 +1,6 @@
 package main
 
 const (
-	ExitCodeOk = iota
-	ExitCodeError
+	exitCodeOk = iota
+	exitCodeError
 )

@@ -1,39 +1,39 @@
 package main
 
-type TaskCollection struct {
-	currentTask Task
-	tasks       []Task
+// Task collection model.
+type taskCollection struct {
+	currentTask task
+	tasks       []task
 }
 
-func NewTaskCollection() *TaskCollection {
-	task := NewTask()
-	tasks := []Task{task}
+// Creates a new task collection.
+func newTaskCollection() *taskCollection {
 
-	return &TaskCollection{
-		currentTask: task,
-		tasks:       tasks,
+	return &taskCollection{
+		currentTask: newTask(), // This is a dummy task, and will be discarded when the first task is created
+		tasks:       []task{},
 	}
 }
 
-func (tc *TaskCollection) Run() error {
+func (tc *taskCollection) run() error {
 	println("tasks running")
 
-	return &TaskError{message: "Method not implemented"}
+	return &taskError{message: "Method not implemented"}
 }
 
-func (tc *TaskCollection) NewTask() {
-	tc.currentTask = NewTask()
+func (tc *taskCollection) newTask() {
+	tc.currentTask = newTask()
 	tc.tasks = append(tc.tasks, tc.currentTask)
 }
 
-func (tc *TaskCollection) SetCurrentTaskTitle(title string) {
-	tc.currentTask.SetTitle(title)
+func (tc *taskCollection) setCurrentTaskTitle(title string) {
+	tc.currentTask.setTitle(title)
 }
 
-func (tc *TaskCollection) AddCurrentTaskDescription(description string) {
-	tc.currentTask.AddDescription(description)
+func (tc *taskCollection) addCurrentTaskDescription(description string) {
+	tc.currentTask.addDescription(description)
 }
 
-func (tc *TaskCollection) AddCurrentTaskCommands(commands []string) {
-	tc.currentTask.AddCommands(commands)
+func (tc *taskCollection) addCurrentTaskCommands(commands []string) {
+	tc.currentTask.addCommands(commands)
 }
