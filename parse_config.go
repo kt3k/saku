@@ -8,20 +8,22 @@ import (
 func ParseConfig(config *[]byte) TaskCollection {
 	tasks := TaskCollection{tasks: []Task{}}
 
-	md := blackfriday.New()
-	ast := md.Parse(*config)
+	node := blackfriday.New().Parse(*config).FirstChild
 
-	//ast.Walk(visitor)
-	ast.Walk(func(node *blackfriday.Node, entering bool) blackfriday.WalkStatus {
-		println(node.String())
+	for node != nil {
+		if node.Type == blackfriday.Heading {
+			/* Heading > Text */
+			println("Heading=" + string(node.FirstChild.Literal))
+		} else if node.Type == blackfriday.BlockQuote {
+			/* BlockQuote > Paragraph > Text */
+			println("BlockQuote=" + string(node.FirstChild.FirstChild.Literal))
+		} else if node.Type == blackfriday.CodeBlock {
+			/* CodeBlock > Text */
+			println("CodeBlock=" + string(node.Literal))
+		}
 
-		return blackfriday.GoToNext
-	})
+		node = node.Next
+	}
 
 	return tasks
-}
-
-func visitor(node *blackfriday.Node, entering bool) blackfriday.WalkStatus {
-	println(node.String())
-	return blackfriday.GoToNext
 }

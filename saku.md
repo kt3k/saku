@@ -1,5 +1,6 @@
 # clean
 > Cleans the workspace
+> Foo
 
     rm -rf vendor
 
