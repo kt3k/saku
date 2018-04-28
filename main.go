@@ -41,9 +41,9 @@ func main() {
 		os.Exit(exitCodeOk)
 	}
 
-	tasks := parseConfig(&config)
+	tasks := ParseConfig(&config)
 
-	err0 := tasks.run()
+	err0 := tasks.Run()
 
 	if err0 != nil {
 		fmt.Println("Error:", err0)

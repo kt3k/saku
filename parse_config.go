@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"gopkg.in/russross/blackfriday.v2"
+	"strings"
 )
 
 // Parses config markdown and returns tasks.
-func parseConfig(config *[]byte) taskCollection {
-	tasks := taskCollection{tasks: []task{}}
+func ParseConfig(config *[]byte) *taskCollection {
+	tasks := newTaskCollection()
 
 	node := blackfriday.New().Parse(*config).FirstChild
 
@@ -14,27 +16,37 @@ func parseConfig(config *[]byte) taskCollection {
 		if node.Type == blackfriday.Heading {
 			/* Heading > Text */
 			title := string(node.FirstChild.Literal)
-			println("Heading=" + title)
+
+			tasks.newTask()
+			tasks.setCurrentTaskTitle(title)
 		} else if node.Type == blackfriday.BlockQuote {
-			/* BlockQuote > Paragraph > Text */
+			/* BlockQuote > Paragraph */
 			p := node.FirstChild
 
 			for p != nil {
-				description := p.FirstChild.Literal
-				println("BlockQuote=" + string(description))
+				/* Paragraph > Text */
+				description := string(p.FirstChild.Literal)
+
+				tasks.addCurrentTaskDescription(description)
 
 				p = p.Next
 			}
 		} else if node.Type == blackfriday.CodeBlock {
 			/* CodeBlock > Text */
-			println("CodeBlock=" + string(node.Literal))
-		} else {
-			println(string(node.Literal))
-			println(string(node.String()))
+			code := string(node.Literal)
+			commands := strings.Split(code, "\n")
+
+			for _, command := range commands {
+				if strings.Trim(command, " \t\r") != "" {
+					tasks.addCurrentTaskCommands([]string{command})
+				}
+			}
 		}
 
 		node = node.Next
 	}
+
+	fmt.Printf("tasks=%#v\n", tasks)
 
 	return tasks
 }
