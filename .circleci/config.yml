@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/kt3k/saku
+    docker:
+      - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1
+      - run: |
+          make cov
+      - save_cache:
+          key: v1
+          paths:
+            - "/go/pkg"
+      - run: bash <(curl -s https://codecov.io/bash)
