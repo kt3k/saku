@@ -7,7 +7,7 @@ import (
 )
 
 // Parses config markdown and returns tasks.
-func ParseConfig(config *[]byte) *taskCollection {
+func ParseConfig(config *[]byte) *TaskCollection {
 	tasks := newTaskCollection()
 
 	node := blackfriday.New().Parse(*config).FirstChild

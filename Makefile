@@ -5,7 +5,7 @@ integration-test:
 	./saku
 
 test:
-	go test -v .
+	go test -race -v .
 
 clean:
 	rm -rf vendor
@@ -18,9 +18,7 @@ fmt:
 	go fmt
 
 cov:
-	echo goverage -coverprofile=cover.out `go list ./... | grep -v /vendor/`
-	echo go tool cover -func=cover.out
-	echo rm -rf cover.out
+	go test -race -coverprofile=coverage.txt -covermode=atomic .
 
 chglog:
 	git tag v0.1.0
