@@ -1,3 +1,5 @@
+<img width="150" src="https://kt3k.github.io/saku/media/saku-logo.svg" />
+
 # saku (作) v0.1.0 WIP
 
 [![CircleCI](https://circleci.com/gh/kt3k/saku.svg?style=svg)](https://circleci.com/gh/kt3k/saku)
