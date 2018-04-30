@@ -76,11 +76,10 @@ func main() {
 
 	err0 := runTasks.Run(&runOptions{})
 
-
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
 		os.Exit(exitCodeError)
 	} else {
-	  fmt.Println(color.CyanString("[saku]"), "Finish", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
+		fmt.Println(color.CyanString("[saku]"), "Finish", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
 	}
 }

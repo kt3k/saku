@@ -44,7 +44,12 @@
     echo hello
     echo world
 
-# fail
+# foo
 > This command fails
 
-    grep abc README.md
+    go foo
+
+# build-and-test
+> Builds and tests
+
+    saku build test

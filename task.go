@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"errors"
+
+	"github.com/fatih/color"
 )
 
 type task struct {
@@ -36,7 +39,7 @@ func (t *task) run(opts *runOptions) error {
 		err := execCommand(command)
 
 		if err != nil {
-			return err
+			return errors.New("Task " + color.MagentaString(t.title) + " failed")
 		}
 	}
 
