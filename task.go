@@ -1,36 +1,50 @@
 package main
 
+import (
+	"fmt"
+)
+
 type task struct {
-	title       string
-	description string
-	commands    []string
-	options     taskOptions
-	aborted     bool
+	title        string
+	descriptions []string
+	commands     []string
+	options      taskOptions
+	aborted      bool
 }
 
 func newTask() task {
 	return task{
-		title:       "",
-		description: "",
-		commands:    []string{},
-		options:     taskOptions{},
-		aborted:     false,
+		title:        "",
+		descriptions: []string{},
+		commands:     []string{},
+		options:      taskOptions{},
+		aborted:      false,
 	}
 }
 
 type taskOptions struct {
 }
 
-// Runs a single command
-func (*task) runSingle(command string) {
+// Runs a task.
+func (t *task) run(opts *runOptions) error {
+	for _, command := range t.commands {
+		if t.aborted {
+			return nil
+		}
+
+		fmt.Println("+" + command)
+		err := execCommand(command)
+
+		if err != nil {
+			fmt.Println("Error:", err)
+			return err
+		}
+	}
+
+	return nil
 }
 
-// Runs a task
-func (t *task) Run(opts *runOptions) {
-	// TODO: runs all commands
-}
-
-// Aborts a task
+// Aborts a task.
 func (t *task) abort() {
 	if t.aborted {
 		return
@@ -39,7 +53,7 @@ func (t *task) abort() {
 
 // Adds the description.
 func (t *task) addDescription(description string) {
-	t.description = t.description + description
+	t.descriptions = append(t.descriptions, description)
 }
 
 // Sets the title.

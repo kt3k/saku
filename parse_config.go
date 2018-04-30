@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gopkg.in/russross/blackfriday.v2"
 	"strings"
 )
@@ -27,7 +26,9 @@ func ParseConfig(config *[]byte) *TaskCollection {
 				/* Paragraph > Text */
 				description := string(p.FirstChild.Literal)
 
-				tasks.addCurrentTaskDescription(description)
+				for _, desc := range strings.Split(description, "\n") {
+					tasks.addCurrentTaskDescription(desc)
+				}
 
 				p = p.Next
 			}
@@ -45,8 +46,6 @@ func ParseConfig(config *[]byte) *TaskCollection {
 
 		node = node.Next
 	}
-
-	fmt.Printf("tasks=%#v\n", tasks)
 
 	return tasks
 }

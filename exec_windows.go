@@ -3,20 +3,17 @@
 package main
 
 import (
-	"bytes"
+	"os"
 	"os/exec"
 )
 
-func execCommand(command string) (string, string, error) {
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-
+func execCommand(command string) error {
 	cmd := exec.Command("cmd.exe", "/s", "/c", "\""+command+"\"")
 
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
 
-	return stdout.String(), stderr.String(), err
+	return err
 }
