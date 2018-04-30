@@ -17,6 +17,7 @@
 # fmt
 > Format source code
 
+    saku hello
     go fmt
 
 # cov

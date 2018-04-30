@@ -39,8 +39,8 @@ func main() {
 	config, err1 := readConfig()
 
 	if err1 != nil {
-		fmt.Println("Error: File not found: saku.md")
-		os.Exit(exitCodeOk)
+		fmt.Println(color.RedString("Error:"), "File not found: saku.md")
+		os.Exit(exitCodeError)
 	}
 
 	tasks := ParseConfig(&config)
@@ -64,7 +64,7 @@ func main() {
 		_, ok := tasks.getByTitle(title)
 
 		if !ok {
-			fmt.Println("Error: Task not defined:", title)
+			fmt.Println(color.RedString("Error:"), "Task not defined:", title)
 			os.Exit(exitCodeOk)
 		}
 	}
@@ -74,7 +74,7 @@ func main() {
 	err0 := runTasks.Run(&runOptions{})
 
 	if err0 != nil {
-		fmt.Println("Error:", err0)
+		fmt.Println(color.RedString("Error:"), err0)
 		os.Exit(exitCodeOk)
 	}
 }

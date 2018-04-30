@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"github.com/mattn/go-isatty"
+	"os"
 )
 
 // Returns the string prepended by the given emoji when the terminal is tty, otherwise drops emoji and returns the string.
