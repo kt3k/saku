@@ -1,13 +1,7 @@
-# hello
-> Say hello
-> To the world
-
-    echo hello
-    echo world
-
 # clean
 > Cleans the workspace
 
+    rm -f coverage.txt
     rm -rf vendor
 
 # build
@@ -20,26 +14,21 @@
 
     go test -v .
 
-# fix
+# fmt
 > Format source code
 
     go fmt
 
 # cov
-> Takes the coverage data
+> Creates the coverage data
 
-> Foo
-> Bar
+    go test -race -coverprofile=coverage.txt -covermode=atomic .
 
-    echo goverage -coverprofile=cover.out `go list ./... | grep -v /vendor/`
+# html-cov
+> Creates the html coverage report
 
-> Baz
-
-
-    echo go tool cover -func=cover.out
-
-
-    echo rm -rf cover.out
+    saku cov
+    go tool cover -html=coverage.txt
 
 # changelog
 > Creates the change log
@@ -47,3 +36,10 @@
     git tag v0.1.0
     git-chglog v0.1.0
     git tag -d v0.1.0
+
+# hello
+> Say hello
+> To the world
+
+    echo hello
+    echo world
