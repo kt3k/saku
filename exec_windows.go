@@ -12,6 +12,7 @@ func execCommand(command string) error {
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.Env = append(os.Environ(), "IN_SAKU=true")
 
 	err := cmd.Run()
 

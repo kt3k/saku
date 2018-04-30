@@ -23,7 +23,9 @@ func readConfig() ([]byte, error) {
 		return []byte{}, err
 	}
 
-	fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath)))
+	if !invokedInSaku() {
+		fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath)))
+	}
 
 	return data, nil
 }

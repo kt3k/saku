@@ -13,3 +13,8 @@ func prependEmoji(e string, str string) string {
 
 	return e + "  " + str
 }
+
+// Returns true if the process is invoked in saku.
+func invokedInSaku() bool {
+	return os.Getenv("IN_SAKU") == "true"
+}
