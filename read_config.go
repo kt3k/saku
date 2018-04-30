@@ -15,7 +15,7 @@ func readConfig() ([]byte, error) {
 		return []byte{}, err
 	}
 
-	fmt.Println("Read", color.MagentaString("saku.md"))
+	fmt.Println("Read", prependEmoji("🔎", color.MagentaString("saku.md")))
 
 	return data, nil
 }
