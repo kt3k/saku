@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/simonleung8/flags"
@@ -71,10 +72,15 @@ func main() {
 
 	runTasks := tasks.filterByTitles(titles)
 
+	fmt.Println(color.CyanString("[saku]"), "Run", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
+
 	err0 := runTasks.Run(&runOptions{})
+
 
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
-		os.Exit(exitCodeOk)
+		os.Exit(exitCodeError)
+	} else {
+	  fmt.Println(color.CyanString("[saku]"), "Finish", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
 	}
 }

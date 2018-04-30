@@ -17,7 +17,6 @@
 # fmt
 > Format source code
 
-    saku hello
     go fmt
 
 # cov
@@ -44,3 +43,8 @@
 
     echo hello
     echo world
+
+# fail
+> This command fails
+
+    grep abc README.md

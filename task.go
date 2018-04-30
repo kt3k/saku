@@ -36,7 +36,6 @@ func (t *task) run(opts *runOptions) error {
 		err := execCommand(command)
 
 		if err != nil {
-			fmt.Println("Error:", err)
 			return err
 		}
 	}
