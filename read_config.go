@@ -9,12 +9,8 @@ import (
 )
 
 // Reads task config from markdown files
-func readConfig() ([]byte, error) {
-	absPath, err := filepath.Abs("saku.md")
-
-	if err != nil {
-		return []byte{}, err
-	}
+func readConfig(configFile string) ([]byte, error) {
+	absPath, _ := filepath.Abs(configFile)
 
 	data, err := ioutil.ReadFile(absPath)
 

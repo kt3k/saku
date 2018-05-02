@@ -1,6 +1,8 @@
 package main
 
+type exitCode int
+
 const (
-	exitCodeOk = iota
+	exitCodeOk exitCode = iota
 	exitCodeError
 )

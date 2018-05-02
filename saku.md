@@ -24,7 +24,7 @@
 
     go test -race -coverprofile=coverage.txt -covermode=atomic .
 
-# html-cov
+# cov-html
 > Creates the html coverage report
 
     saku cov
@@ -48,6 +48,11 @@
 > This command fails
 
     go foo
+
+# hello
+> Say hello
+
+    echo hello
 
 # build-and-test
 > Builds and tests

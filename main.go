@@ -11,6 +11,12 @@ import (
 )
 
 func main() {
+	exitCode := run(os.Args...)
+
+	os.Exit(int(exitCode))
+}
+
+func run(args ...string) exitCode {
 	fc := flags.New()
 
 	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
@@ -20,28 +26,30 @@ func main() {
 	fc.NewBoolFlag("serial", "s", "")
 	fc.NewStringFlagWithDefault("config", "c", "", "saku.md")
 
-	err := fc.Parse(os.Args...)
+	err := fc.Parse(args...)
 
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(exitCodeError)
+		fmt.Println(color.RedString("Error:"), err)
+		return exitCodeError
 	}
 
 	if fc.Bool("help") {
 		usage()
-		os.Exit(exitCodeOk)
+		return exitCodeOk
 	}
 
 	if fc.Bool("version") {
 		fmt.Printf("saku@%s\n", Version)
-		os.Exit(exitCodeOk)
+		return exitCodeOk
 	}
 
-	config, err1 := readConfig()
+	configFile := fc.String("config")
+
+	config, err1 := readConfig(configFile)
 
 	if err1 != nil {
-		fmt.Println(color.RedString("Error:"), "File not found: saku.md")
-		os.Exit(exitCodeError)
+		fmt.Println(color.RedString("Error:"), "File not found:", configFile)
+		return exitCodeError
 	}
 
 	tasks := ParseConfig(&config)
@@ -58,7 +66,7 @@ func main() {
 			}
 		}
 
-		os.Exit(exitCodeOk)
+		return exitCodeOk
 	}
 
 	for _, title := range titles {
@@ -66,7 +74,7 @@ func main() {
 
 		if !ok {
 			fmt.Println(color.RedString("Error:"), "Task not defined:", title)
-			os.Exit(exitCodeOk)
+			return exitCodeError
 		}
 	}
 
@@ -78,8 +86,11 @@ func main() {
 
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
-		os.Exit(exitCodeError)
+
+		return exitCodeError
 	} else {
 		fmt.Println(color.CyanString("[saku]"), "Finish", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
 	}
+
+	return exitCodeOk
 }
