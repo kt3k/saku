@@ -11,9 +11,7 @@ import (
 )
 
 func main() {
-	exitCode := run(os.Args...)
-
-	os.Exit(int(exitCode))
+	os.Exit(int(run(os.Args...)))
 }
 
 func run(args ...string) exitCode {
@@ -78,18 +76,45 @@ func run(args ...string) exitCode {
 		}
 	}
 
+	runOpts := &runOptions{cwd: "", fc: fc}
+
+	if runOpts.isSerialAndParallel() {
+		fmt.Println(color.RedString("Error:"), "both --serial and --parallel options are specified")
+		return exitCodeError
+	}
+
 	runTasks := tasks.filterByTitles(titles)
 
-	fmt.Println(color.CyanString("[saku]"), "Run", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
+	fmt.Print(color.CyanString("[saku]"), " Run ", color.MagentaString(strings.Join(titles, ", ")))
 
-	err0 := runTasks.Run(&runOptions{})
+	if len(titles) > 1 {
+		fmt.Print(" ", runOpts.runLabel())
+	}
+
+	fmt.Println()
+
+	err0 := runTasks.Run(runOpts)
 
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
 
 		return exitCodeError
 	} else {
-		fmt.Println(color.CyanString("[saku]"), "Finish", color.MagentaString(strings.Join(titles, ", ")), "in", color.CyanString("sequence"))
+		fmt.Print(color.CyanString("[saku]"))
+
+		if !invokedInSaku() {
+			fmt.Print(" ", prependEmoji("✨", "Finish "))
+		} else {
+			fmt.Print(" Finish ")
+		}
+
+		fmt.Print(color.MagentaString(strings.Join(titles, ", ")))
+
+		if len(titles) > 1 {
+			fmt.Print(" ", runOpts.runLabel())
+		}
+
+		fmt.Println()
 	}
 
 	return exitCodeOk

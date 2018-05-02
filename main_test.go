@@ -34,6 +34,12 @@ func TestInfoAction(t *testing.T) {
 	}
 }
 
+func TestParallelAndSeriallOptions(t *testing.T) {
+	if run("saku", "--serial", "--parallel", "hello") == exitCodeOk {
+		t.Error("It is error if both --serial and --parallel specified")
+	}
+}
+
 func TestNoTask(t *testing.T) {
 	if run("saku", "bar") == exitCodeOk {
 		t.Error("invoking with non task fails")

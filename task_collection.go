@@ -21,9 +21,13 @@ func newTaskCollection() *TaskCollection {
 }
 
 func (tc *TaskCollection) Run(opts *runOptions) error {
-	err := tc.runSequentially(opts)
+	if opts.isParallel() {
+		return tc.runParallel(opts)
+	} else if opts.isRace() {
+		return tc.runInRace(opts)
+	}
 
-	return err
+	return tc.runSequentially(opts)
 }
 
 func (tc *TaskCollection) runSequentially(opts *runOptions) error {
