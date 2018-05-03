@@ -11,10 +11,11 @@ import (
 )
 
 func main() {
-	os.Exit(int(run(os.Args...)))
+	cwd, _ := os.Getwd()
+	os.Exit(int(run(cwd, os.Args...)))
 }
 
-func run(args ...string) exitCode {
+func run(cwd string, args ...string) exitCode {
 	fc := flags.New()
 
 	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
@@ -43,7 +44,7 @@ func run(args ...string) exitCode {
 
 	configFile := fc.String("config")
 
-	config, err1 := readConfig(configFile)
+	config, err1 := readConfig(cwd, configFile)
 
 	if err1 != nil {
 		if configFile != defaultConfigFile {

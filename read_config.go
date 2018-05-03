@@ -15,8 +15,8 @@ const defaultConfigFile = "saku.md"
 var patternEmbedDirective = regexp.MustCompile(`(?ism)<!--\s*saku\s+start\s*-->(.*)<!--\s*saku\s+end\s*-->`)
 
 // Reads task config from markdown files
-func readConfig(configFile string) ([]byte, error) {
-	absPath, _ := filepath.Abs(configFile)
+func readConfig(cwd string, configFile string) ([]byte, error) {
+	absPath := filepath.Join(cwd, configFile)
 
 	data, err := ioutil.ReadFile(absPath)
 
@@ -31,7 +31,7 @@ func readConfig(configFile string) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	absPath, _ = filepath.Abs("README.md")
+	absPath = filepath.Join(cwd, "README.md")
 	data, err = ioutil.ReadFile(absPath)
 
 	if err != nil {
