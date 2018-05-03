@@ -139,6 +139,30 @@ The extra options after '--' are passed to each task command.
 
 # Notes
 
+## Embed `saku.md` in README.md
+
+You can optionally embed `saku.md` in README.md. See the below for details.
+
+```md
+# Development
+
+These are the commands for development. You can invoke them with `saku` command.
+
+<!-- saku start -->
+
+## build
+
+    go build -v -i main.go
+
+## test
+
+    go test -race ./...
+
+<!-- saku end -->
+```
+
+The contents between `<!-- saku start -->` and `<!-- saku end -->` are used as `saku.md`. You can write them as if they are the part of your README.
+
 ## Example use cases
 
 - [moneybit-app](https://github.com/kt3k/moneybit-app)'s [saku.md](https://github.com/kt3k/moneybit-app/blob/master/saku.md)
@@ -159,6 +183,17 @@ Saku is the Japanese name for the Chinese character "作", which means "make". S
 - yaml-based tools
   - [robo][]
   - [go-task][]
+
+# Development
+
+<!-- saku start -->
+
+> # build
+> Builds the binary
+
+    go build -o saku
+
+<!-- saku end -->
 
 # History
 

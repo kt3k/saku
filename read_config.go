@@ -1,12 +1,18 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
 
 	"github.com/fatih/color"
 )
+
+const defaultConfigFile = "saku.md"
+
+var patternEmbedDirective = regexp.MustCompile(`(?ism)<!--\s*saku\s+start\s*-->(.*)<!--\s*saku\s+end\s*-->`)
 
 // Reads task config from markdown files
 func readConfig(configFile string) ([]byte, error) {
@@ -14,14 +20,27 @@ func readConfig(configFile string) ([]byte, error) {
 
 	data, err := ioutil.ReadFile(absPath)
 
-	if err != nil {
-		// TODO: Tries reading from README.md, readme.md, README.markdown, readme.markdown
+	if err == nil {
+		if !invokedInSaku() {
+			fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath)))
+		}
+		return data, nil
+	}
+
+	if configFile != defaultConfigFile {
 		return []byte{}, err
 	}
 
-	if !invokedInSaku() {
-		fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath)))
+	absPath, _ = filepath.Abs("README.md")
+	data, err = ioutil.ReadFile(absPath)
+
+	if err != nil {
+		return []byte{}, err
 	}
 
-	return data, nil
+	if !patternEmbedDirective.Match(data) {
+		return []byte{}, errors.New("No <!-- saku start --><!-- saku end --> directive found")
+	}
+
+	return patternEmbedDirective.FindSubmatch(data)[1], nil
 }

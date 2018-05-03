@@ -22,7 +22,7 @@ func run(args ...string) exitCode {
 	fc.NewBoolFlag("parallel", "p", "Runs tasks in parallel.")
 	fc.NewBoolFlag("race", "r", "")
 	fc.NewBoolFlag("serial", "s", "")
-	fc.NewStringFlagWithDefault("config", "c", "", "saku.md")
+	fc.NewStringFlagWithDefault("config", "c", "", defaultConfigFile)
 
 	err := fc.Parse(args...)
 
@@ -46,7 +46,13 @@ func run(args ...string) exitCode {
 	config, err1 := readConfig(configFile)
 
 	if err1 != nil {
-		fmt.Println(color.RedString("Error:"), "File not found:", configFile)
+		if configFile != defaultConfigFile {
+			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
+		} else {
+			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
+			fmt.Println("  And <!-- saku start --><!-- saku end --> directive not found in README.md as well")
+		}
+
 		return exitCodeError
 	}
 
