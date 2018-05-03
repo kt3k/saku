@@ -1,8 +1,9 @@
 # clean
 > Cleans the workspace
 
+    rm -rf $GOPATH/bin/saku
     rm -f coverage.txt
-    rm -rf vendor
+    rm saku
 
 # build
 > Builds the binary
