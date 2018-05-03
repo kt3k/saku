@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -34,6 +35,24 @@ func TestInvalidFlag(t *testing.T) {
 func TestConfigNotFound(t *testing.T) {
 	if run(cwd, "saku", "-c", "foo.md") == exitCodeOk {
 		t.Error("Should exit with error if the specified config not found")
+	}
+}
+
+func TestConfigNotFoundReadmeNotFound(t *testing.T) {
+	if run(filepath.Join(cwd, "fixture", "no-files"), "saku") == exitCodeOk {
+		t.Error("Should exit with error if both saku.md and readme.md not found")
+	}
+}
+
+func TestConfigNotFoundDirectiveNotFound(t *testing.T) {
+	if run(filepath.Join(cwd, "fixture", "no-saku-md-no-directive"), "saku") == exitCodeOk {
+		t.Error("Should exit with error if saku.md not found and <!-- saku start --><!-- saku end --> directive not found in readme.md")
+	}
+}
+
+func TestReadmeDirectiveConfig(t *testing.T) {
+	if run(filepath.Join(cwd, "fixture", "readme-directive"), "saku") == exitCodeError {
+		t.Error("saku can read config from the contents between <!-- saku start --><!-- saku end --> in README.md")
 	}
 }
 
