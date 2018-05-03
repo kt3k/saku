@@ -12,7 +12,7 @@ import (
 
 func main() {
 	cwd, _ := os.Getwd()
-	os.Exit(int(run(cwd, os.Args...)))
+	os.Exit(int(run(cwd, os.Args[1:]...)))
 }
 
 func run(cwd string, args ...string) exitCode {
@@ -59,7 +59,7 @@ func run(cwd string, args ...string) exitCode {
 
 	tasks := ParseConfig(&config)
 
-	titles := fc.Args()[1:]
+	titles := fc.Args()
 
 	if len(titles) == 0 {
 		fmt.Println("There are", color.MagentaString(strconv.Itoa(len(tasks.tasks))), "task(s)")
