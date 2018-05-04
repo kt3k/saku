@@ -29,21 +29,23 @@ type taskOptions struct {
 }
 
 // Runs a task.
-func (t *task) run(opts *runOptions) error {
+func (t *task) run(opts *runOptions, c chan error) {
 	for _, command := range t.commands {
 		if t.aborted {
-			return nil
+			c <- nil
+			return
 		}
 
 		fmt.Println("+" + command)
 		err := execCommand(command)
 
 		if err != nil {
-			return errors.New("Task " + color.MagentaString(t.title) + " failed")
+			c <- errors.New("Task " + color.MagentaString(t.title) + " failed")
+			return
 		}
 	}
 
-	return nil
+	c <- nil
 }
 
 // Aborts a task.

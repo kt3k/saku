@@ -25,7 +25,7 @@ func (r *runOptions) isSerialAndParallel() bool {
 }
 
 func (r *runOptions) isParallel() bool {
-	return r.fc.Bool("parallel")
+	return r.fc.Bool("parallel") && !r.fc.Bool("race")
 }
 
 func (r *runOptions) isRace() bool {

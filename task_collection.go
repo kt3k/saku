@@ -31,8 +31,12 @@ func (tc *TaskCollection) Run(opts *runOptions) error {
 }
 
 func (tc *TaskCollection) runSequentially(opts *runOptions) error {
+	c := make(chan error)
+
 	for _, t := range tc.tasks {
-		err := t.run(opts)
+		go t.run(opts, c)
+
+		err := <-c
 
 		if err != nil {
 			return err
@@ -43,13 +47,49 @@ func (tc *TaskCollection) runSequentially(opts *runOptions) error {
 }
 
 func (tc *TaskCollection) runParallel(opts *runOptions) error {
-	// TODO: run tasks in parallel
+	c := make(chan error)
+
+	for i := range tc.tasks {
+		t := tc.tasks[i]
+		go t.run(opts, c)
+	}
+
+	max := len(tc.tasks)
+
+	for i := 0; i < max; i++ {
+		err := <-c
+
+		if err != nil {
+			tc.abort()
+			return err
+		}
+	}
+
 	return nil
 }
 
 func (tc *TaskCollection) runInRace(opts *runOptions) error {
-	// TODO: run tasks in race
+	c := make(chan error)
+
+	for i := range tc.tasks {
+		t := tc.tasks[i]
+		go t.run(opts, c)
+	}
+
+	err := <-c
+	tc.abort()
+
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func (tc *TaskCollection) abort() {
+	for _, task := range tc.tasks {
+		task.abort()
+	}
 }
 
 func (tc *TaskCollection) newTask() {
@@ -73,10 +113,12 @@ func (tc *TaskCollection) addCurrentTaskCommands(commands []string) {
 func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 	tasks := []task{}
 	taskMap := map[string]*task{}
+
 	for _, title := range titles {
 		tasks = append(tasks, *tc.taskMap[title])
 		taskMap[title] = tc.taskMap[title]
 	}
+
 	return &TaskCollection{
 		currentTask: &tasks[len(tasks)-1],
 		tasks:       tasks,

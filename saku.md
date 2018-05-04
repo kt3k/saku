@@ -59,3 +59,8 @@
 > Builds and tests
 
     saku build test
+
+# p9090
+> Runs a static server
+
+    static -p 9090
