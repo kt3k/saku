@@ -66,6 +66,10 @@ func run(cwd string, args ...string) exitCode {
 
 		for _, t := range tasks.tasks {
 			fmt.Println("  " + color.CyanString("["+t.title+"]"))
+			if len(t.descriptions) == 0 {
+				fmt.Println("    " + color.New(color.Italic).Sprint("No description"))
+			}
+
 			for _, desc := range t.descriptions {
 				fmt.Println("    " + desc)
 			}

@@ -64,3 +64,7 @@
 > Runs a static server
 
     static -p 9090
+
+# nodesc
+
+    echo nodesc
