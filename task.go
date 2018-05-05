@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 
 	"github.com/fatih/color"
 )
@@ -13,6 +14,7 @@ type task struct {
 	commands     []string
 	options      taskOptions
 	aborted      bool
+	cmd          *exec.Cmd
 }
 
 func newTask() task {
@@ -22,6 +24,7 @@ func newTask() task {
 		commands:     []string{},
 		options:      taskOptions{},
 		aborted:      false,
+		cmd:          nil,
 	}
 }
 
@@ -37,9 +40,9 @@ func (t *task) run(opts *runOptions, c chan error) {
 		}
 
 		fmt.Println("+" + command)
-		err := execCommand(command)
+		t.cmd = execCommand(command)
 
-		if err != nil {
+		if t.cmd.Run() != nil {
 			c <- errors.New("Task " + color.MagentaString(t.title) + " failed")
 			return
 		}
@@ -53,6 +56,10 @@ func (t *task) abort() {
 	if t.aborted {
 		return
 	}
+
+	terminateCommand(t.cmd)
+
+	t.aborted = true
 }
 
 // Adds the description.

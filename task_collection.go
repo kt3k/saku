@@ -3,7 +3,7 @@ package main
 // Task collection model.
 type TaskCollection struct {
 	currentTask *task
-	tasks       []task
+	tasks       []*task
 	taskMap     map[string]*task
 }
 
@@ -15,7 +15,7 @@ func newTaskCollection() *TaskCollection {
 
 	return &TaskCollection{
 		currentTask: &t,
-		tasks:       []task{},
+		tasks:       []*task{},
 		taskMap:     map[string]*task{},
 	}
 }
@@ -54,9 +54,7 @@ func (tc *TaskCollection) runParallel(opts *runOptions) error {
 		go t.run(opts, c)
 	}
 
-	max := len(tc.tasks)
-
-	for i := 0; i < max; i++ {
+	for range tc.tasks {
 		err := <-c
 
 		if err != nil {
@@ -72,29 +70,24 @@ func (tc *TaskCollection) runInRace(opts *runOptions) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
-		t := tc.tasks[i]
-		go t.run(opts, c)
+		go tc.tasks[i].run(opts, c)
 	}
 
-	err := <-c
-	tc.abort()
+	defer tc.abort()
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return <-c
 }
 
 func (tc *TaskCollection) abort() {
-	for _, task := range tc.tasks {
-		task.abort()
+	for _, t := range tc.tasks {
+		t.abort()
 	}
 }
 
 func (tc *TaskCollection) newTask() {
-	tc.tasks = append(tc.tasks, newTask())
-	tc.currentTask = &tc.tasks[len(tc.tasks)-1]
+	t := newTask()
+	tc.tasks = append(tc.tasks, &t)
+	tc.currentTask = &t
 }
 
 func (tc *TaskCollection) setCurrentTaskTitle(title string) {
@@ -111,16 +104,16 @@ func (tc *TaskCollection) addCurrentTaskCommands(commands []string) {
 }
 
 func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
-	tasks := []task{}
+	tasks := []*task{}
 	taskMap := map[string]*task{}
 
 	for _, title := range titles {
-		tasks = append(tasks, *tc.taskMap[title])
+		tasks = append(tasks, tc.taskMap[title])
 		taskMap[title] = tc.taskMap[title]
 	}
 
 	return &TaskCollection{
-		currentTask: &tasks[len(tasks)-1],
+		currentTask: tasks[len(tasks)-1],
 		tasks:       tasks,
 		taskMap:     taskMap,
 	}
@@ -128,7 +121,7 @@ func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 
 // Gets a task by the given title.
 func (tc *TaskCollection) getByTitle(title string) (*task, bool) {
-	task, ok := tc.taskMap[title]
+	t, ok := tc.taskMap[title]
 
-	return task, ok
+	return t, ok
 }

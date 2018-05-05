@@ -8,7 +8,7 @@ import (
 	"os/exec"
 )
 
-func execCommand(command string) error {
+func execCommand(command string) *exec.Cmd {
 	cmd := exec.Command("/bin/sh", "-c", command)
 
 	cmd.Stdout = os.Stdout
@@ -17,12 +17,13 @@ func execCommand(command string) error {
 	cmd.SysProcAttr.Setsid = true
 	cmd.Env = append(os.Environ(), "IN_SAKU=true")
 
-	err := cmd.Run()
-
-	return err
+	return cmd
 }
 
 func terminateCommand(cmd *exec.Cmd) error {
+	if cmd == nil {
+		return nil
+	}
 	if cmd.Process == nil {
 		return nil
 	}
