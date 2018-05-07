@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Parses config markdown and returns tasks.
+// ParseConfig parses the given config markdown and returns tasks.
 func ParseConfig(config *[]byte) *TaskCollection {
 	tasks := newTaskCollection()
 

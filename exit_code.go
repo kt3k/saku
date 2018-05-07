@@ -1,8 +1,10 @@
 package main
 
-type exitCode int
+// ExitCode is the exit code of saku's Run function
+type ExitCode int
 
+// The exit codes
 const (
-	exitCodeOk exitCode = iota
-	exitCodeError
+	ExitCodeOk ExitCode = iota
+	ExitCodeError
 )

@@ -1,6 +1,6 @@
 package main
 
-// Task collection model.
+// TaskCollection is the model of the list of tasks.
 type TaskCollection struct {
 	currentTask *task
 	tasks       []*task
@@ -20,6 +20,7 @@ func newTaskCollection() *TaskCollection {
 	}
 }
 
+// Run runs the tasks.
 func (tc *TaskCollection) Run(opts *runOptions) error {
 	if opts.isParallel() {
 		return tc.runParallel(opts)

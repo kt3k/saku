@@ -16,7 +16,7 @@ func main() {
 }
 
 // Run saku command in the given cwd and arguments
-func Run(cwd string, args ...string) exitCode {
+func Run(cwd string, args ...string) ExitCode {
 	fc := flags.New()
 
 	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
@@ -30,17 +30,17 @@ func Run(cwd string, args ...string) exitCode {
 
 	if err != nil {
 		fmt.Println(color.RedString("Error:"), err)
-		return exitCodeError
+		return ExitCodeError
 	}
 
 	if fc.Bool("help") {
 		usage()
-		return exitCodeOk
+		return ExitCodeOk
 	}
 
 	if fc.Bool("version") {
 		fmt.Printf("saku@%s\n", Version)
-		return exitCodeOk
+		return ExitCodeOk
 	}
 
 	configFile := fc.String("config")
@@ -55,7 +55,7 @@ func Run(cwd string, args ...string) exitCode {
 			fmt.Println("  And <!-- saku start --><!-- saku end --> directive not found in README.md as well")
 		}
 
-		return exitCodeError
+		return ExitCodeError
 	}
 
 	tasks := ParseConfig(&config)
@@ -76,7 +76,7 @@ func Run(cwd string, args ...string) exitCode {
 			}
 		}
 
-		return exitCodeOk
+		return ExitCodeOk
 	}
 
 	for _, title := range titles {
@@ -84,7 +84,7 @@ func Run(cwd string, args ...string) exitCode {
 
 		if !ok {
 			fmt.Println(color.RedString("Error:"), "Task not defined:", title)
-			return exitCodeError
+			return ExitCodeError
 		}
 	}
 
@@ -92,7 +92,7 @@ func Run(cwd string, args ...string) exitCode {
 
 	if runOpts.isSerialAndParallel() {
 		fmt.Println(color.RedString("Error:"), "both --serial and --parallel options are specified")
-		return exitCodeError
+		return ExitCodeError
 	}
 
 	runTasks := tasks.filterByTitles(titles)
@@ -110,18 +110,18 @@ func Run(cwd string, args ...string) exitCode {
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
 
-		return exitCodeError
-	} else {
-		fmt.Print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
-
-		fmt.Print(color.MagentaString(strings.Join(titles, ", ")))
-
-		if len(titles) > 1 {
-			fmt.Print(" ", runOpts.runLabel())
-		}
-
-		fmt.Println()
+		return ExitCodeError
 	}
 
-	return exitCodeOk
+	fmt.Print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
+
+	fmt.Print(color.MagentaString(strings.Join(titles, ", ")))
+
+	if len(titles) > 1 {
+		fmt.Print(" ", runOpts.runLabel())
+	}
+
+	fmt.Println()
+
+	return ExitCodeOk
 }
