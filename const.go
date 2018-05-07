@@ -8,3 +8,6 @@ const (
 	ExitCodeOk ExitCode = iota
 	ExitCodeError
 )
+
+// Version is the version number of saku.
+const Version = "0.1.0"
