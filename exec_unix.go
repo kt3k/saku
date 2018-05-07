@@ -4,8 +4,8 @@ package main
 
 import (
 	"os"
-	"syscall"
 	"os/exec"
+	"syscall"
 )
 
 func execCommand(command string) *exec.Cmd {
@@ -21,10 +21,7 @@ func execCommand(command string) *exec.Cmd {
 }
 
 func terminateCommand(cmd *exec.Cmd) error {
-	if cmd == nil {
-		return nil
-	}
-	if cmd.Process == nil {
+	if cmd == nil || cmd.Process == nil {
 		return nil
 	}
 

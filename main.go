@@ -111,13 +111,7 @@ func run(cwd string, args ...string) exitCode {
 
 		return exitCodeError
 	} else {
-		fmt.Print(color.CyanString("[saku]"))
-
-		if !invokedInSaku() {
-			fmt.Print(" ", prependEmoji("✨", "Finish "))
-		} else {
-			fmt.Print(" Finish ")
-		}
+		fmt.Print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
 
 		fmt.Print(color.MagentaString(strings.Join(titles, ", ")))
 

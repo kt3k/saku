@@ -23,7 +23,7 @@
 # cov
 > Creates the coverage data
 
-    go test -race -coverprofile=coverage.txt -covermode=atomic .
+    go test -coverprofile=coverage.txt -covermode=atomic .
 
 # cov-html
 > Creates the html coverage report

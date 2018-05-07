@@ -22,7 +22,7 @@ func readConfig(cwd string, configFile string) ([]byte, error) {
 
 	if err == nil {
 		if !invokedInSaku() {
-			fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath)))
+			fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath), emojiEnabled()))
 		}
 		return data, nil
 	}

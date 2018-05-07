@@ -85,3 +85,43 @@ func TestSingleErrorTask(t *testing.T) {
 		t.Error("invoking with failing task causes command exit with error")
 	}
 }
+
+func TestMultipleTask(t *testing.T) {
+	if run(cwd, "hello", "hello") == exitCodeError {
+		t.Error("Should exit with 0 if all the sequencial tasks pass")
+	}
+}
+
+func TestParallel(t *testing.T) {
+	code := run(filepath.Join(cwd, "fixture", "parallel"), "-p", "1sec-ok", "2sec-ok")
+
+	if code == exitCodeError {
+		t.Error("Should exit with 0 if all parallel tasks exit with 0")
+	}
+
+	// TODO: Assert about the commands are invoked concurrently
+}
+
+func TestParallelFail(t *testing.T) {
+	code := run(filepath.Join(cwd, "fixture", "parallel"), "-p", "1sec-fail", "2sec-ok")
+
+	if code == exitCodeOk {
+		t.Error("Should fail if one of task failed")
+	}
+}
+
+func TestParallelRace(t *testing.T) {
+	code := run(filepath.Join(cwd, "fixture", "parallel"), "-r", "-p", "1sec-ok", "2sec-fail")
+
+	if code == exitCodeError {
+		t.Error("Should exit with 0 if the first task exit with 0")
+	}
+}
+
+func TestParallelRaceFail(t *testing.T) {
+	code := run(filepath.Join(cwd, "fixture", "parallel"), "-r", "-p", "1sec-fail", "2sec-ok")
+
+	if code == exitCodeOk {
+		t.Error("Should exit with error if the first task failed")
+	}
+}
