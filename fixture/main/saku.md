@@ -37,3 +37,34 @@
     git tag v0.1.0
     git-chglog v0.1.0
     git tag -d v0.1.0
+
+# hello
+> Say hello
+> To the world
+
+    echo hello
+    echo world
+
+# foo
+> This command fails
+
+    go foo
+
+# hello
+> Say hello
+
+    echo hello
+
+# build-and-test
+> Builds and tests
+
+    saku build test
+
+# p9090
+> Runs a static server
+
+    static -p 9090
+
+# nodesc
+
+    echo nodesc

@@ -34,16 +34,10 @@ type taskOptions struct {
 // Runs a task.
 func (t *task) run(opts *runOptions, c chan error) {
 	for _, command := range t.commands {
-		if t.aborted {
-			c <- nil
-			return
-		}
+		err := t.runSingleCommand(command)
 
-		fmt.Println("+" + command)
-		t.cmd = execCommand(command)
-
-		if t.cmd.Run() != nil {
-			c <- errors.New("Task " + color.MagentaString(t.title) + " failed")
+		if err != nil {
+			c <- err
 			return
 		}
 	}
@@ -51,15 +45,29 @@ func (t *task) run(opts *runOptions, c chan error) {
 	c <- nil
 }
 
-// Aborts a task.
-func (t *task) abort() {
+// Runs a single command
+func (t *task) runSingleCommand(command string) error {
 	if t.aborted {
-		return
+		return nil
 	}
 
-	terminateCommand(t.cmd)
+	fmt.Println("+" + command)
+	t.cmd = execCommand(command)
 
-	t.aborted = true
+	if t.cmd.Run() != nil {
+		return errors.New("Task " + color.MagentaString(t.title) + " failed")
+	}
+
+	return nil
+}
+
+// Aborts a task.
+func (t *task) abort() {
+	if !t.aborted {
+		terminateCommand(t.cmd)
+
+		t.aborted = true
+	}
 }
 
 // Adds the description.

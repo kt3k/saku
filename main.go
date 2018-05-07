@@ -12,10 +12,11 @@ import (
 
 func main() {
 	cwd, _ := os.Getwd()
-	os.Exit(int(run(cwd, os.Args[1:]...)))
+	os.Exit(int(Run(cwd, os.Args[1:]...)))
 }
 
-func run(cwd string, args ...string) exitCode {
+// Run saku command in the given cwd and arguments
+func Run(cwd string, args ...string) exitCode {
 	fc := flags.New()
 
 	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
