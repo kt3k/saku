@@ -34,12 +34,12 @@ func Run(cwd string, args ...string) ExitCode {
 	}
 
 	if fc.Bool("help") {
-		usage()
+		actionHelp()
 		return ExitCodeOk
 	}
 
 	if fc.Bool("version") {
-		fmt.Printf("saku@%s\n", Version)
+		actionVersion()
 		return ExitCodeOk
 	}
 
