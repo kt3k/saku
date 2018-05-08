@@ -8,8 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           key: v1
-      - run: |
-          go test -coverprofile=coverage.txt -covermode=atomic .
+      - run: go test -tags coverage -coverprofile=coverage.txt -covermode=atomic .
       - save_cache:
           key: v1
           paths:

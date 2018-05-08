@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
-func actionVersion() {
+func actionVersion() ExitCode {
 	fmt.Printf("saku@%s\n", Version)
+
+	return ExitCodeOk
 }

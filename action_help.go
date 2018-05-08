@@ -7,7 +7,7 @@ import (
 )
 
 // Shows the help message.
-func actionHelp() {
+func actionHelp() ExitCode {
 	fmt.Printf(`
   Usage: %s [options] <task, ...> [-- extra-options]
 
@@ -26,4 +26,6 @@ func actionHelp() {
   The extra options after '--' are passed to each task command.
 
 `, color.CyanString("saku"))
+
+	return ExitCodeOk
 }
