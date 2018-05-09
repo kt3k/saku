@@ -8,12 +8,7 @@
 # foo
 > This command fails
 
-    go foo
-
-# hello
-> Say hello
-
-    echo hello
+    foo
 
 # build-and-test
 > Builds and tests

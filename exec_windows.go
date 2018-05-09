@@ -9,7 +9,7 @@ import (
 )
 
 func execCommand(command string) *exec.Cmd {
-	cmd := exec.Command("cmd.exe", "/s", "/c", "\""+command+"\"")
+	cmd := exec.Command("cmd.exe", "/s", "/c", command)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

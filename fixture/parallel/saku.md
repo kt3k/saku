@@ -1,28 +1,29 @@
-# 10sec-ok
+# 1sec-ok
 
-    sleep 10
-    echo success
-
-# 10sec-fail
-
-    sleep 10
-    foo
+    sleep 1
+    echo ok
 
 # 1sec-fail
 
     sleep 1
     foo
 
-# 1sec-ok
+# 2sec-ok
 
-    sleep 1
-    echo success
+    sleep 2
+    echo ok
 
 # 2sec-fail
 
     sleep 2
     foo
 
-# 2sec-ok
+# 10sec-ok
 
-    sleep 2
+    sleep 10
+    echo ok
+
+# 10sec-fail
+
+    sleep 10
+    foo

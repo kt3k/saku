@@ -9,7 +9,7 @@ These are dev commands.
 
 ## test
 
-    echo build
+    echo test
 
 <!-- saku end -->
 
