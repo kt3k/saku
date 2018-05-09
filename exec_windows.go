@@ -19,7 +19,7 @@ func execCommand(command string) *exec.Cmd {
 }
 
 func terminateCommand(cmd *exec.Cmd) error {
-	if cmd == nill || cmd.Process == nil {
+	if cmd == nil || cmd.Process == nil {
 		return nil
 	}
 

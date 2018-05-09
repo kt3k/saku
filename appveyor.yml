@@ -1,0 +1,10 @@
+clone_folder: c:\gopath\src\github.com\kt3k\saku
+
+environment:
+  GOPATH: c:\gopath
+
+build: off
+deploy: off
+
+test_script:
+  - go test -v .
