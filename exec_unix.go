@@ -28,7 +28,7 @@ func terminateCommand(cmd *exec.Cmd) error {
 	group, err := os.FindProcess(-1 * cmd.Process.Pid)
 
 	if err == nil {
-		group.Signal(syscall.SIGKILL)
+		group.Signal(syscall.SIGTERM)
 	}
 
 	return err

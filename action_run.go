@@ -2,12 +2,18 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/fatih/color"
 )
 
 func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) ExitCode {
+	done := make(chan error, 1)
+	sigs := make(chan os.Signal, 1)
+
 	for _, title := range titles {
 		_, ok := tasks.getByTitle(title)
 
@@ -32,7 +38,21 @@ func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) Exit
 
 	fmt.Println()
 
-	err0 := runTasks.Run(runOpts)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+
+	go func() {
+		sig := <-sigs
+
+		runTasks.abort()
+
+		done <- fmt.Errorf("aborted: signal=%s", sig)
+	}()
+
+	go func() {
+		done <- runTasks.Run(runOpts)
+	}()
+
+	err0 := <-done
 
 	if err0 != nil {
 		fmt.Println(color.RedString("Error:"), err0)
