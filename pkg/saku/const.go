@@ -1,4 +1,4 @@
-package main
+package saku
 
 // ExitCode is the exit code of saku's Run function
 type ExitCode int

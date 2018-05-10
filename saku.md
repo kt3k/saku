@@ -13,7 +13,7 @@
 # test
 > Runs the tests
 
-    go test -v .
+    cd pkg/saku; go test -v .
 
 # fmt
 > Format source code
@@ -23,13 +23,13 @@
 # cov
 > Creates the coverage data
 
-    go test -coverprofile=coverage.txt -covermode=atomic .
+    cd pkg/saku; go test -coverprofile=coverage.txt -covermode=atomic .
 
 # cov-html
 > Creates the html coverage report
 
     saku cov
-    go tool cover -html=coverage.txt
+    go tool cover -html=pkg/saku/coverage.txt
 
 # changelog
 > Creates the change log

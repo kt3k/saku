@@ -21,4 +21,4 @@
 
 # fail-without-extra-args
 
-    go run fixture/main/fail-without-extra-args.go
+    go run ../../fixture/main/fail-without-extra-args.go

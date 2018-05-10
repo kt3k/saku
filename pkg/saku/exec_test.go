@@ -1,4 +1,4 @@
-package main
+package saku
 
 import (
 	"os/exec"

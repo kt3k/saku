@@ -1,4 +1,4 @@
-package main
+package saku
 
 import (
 	"github.com/mattn/go-isatty"

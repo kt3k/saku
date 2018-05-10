@@ -7,4 +7,5 @@ build: off
 deploy: off
 
 test_script:
+  - cd pkg\saku
   - go test -v .

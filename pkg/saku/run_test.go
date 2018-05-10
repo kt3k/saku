@@ -1,4 +1,4 @@
-package main
+package saku
 
 import (
 	"os"
@@ -15,12 +15,14 @@ var readmeDirectiveDir = ""
 
 func TestMain(m *testing.M) {
 	cwd, _ := os.Getwd()
+	root := filepath.Join(cwd, "..", "..")
+	println(root)
 
-	mainDir = filepath.Join(cwd, "fixture", "main")
-	parallelDir = filepath.Join(cwd, "fixture", "parallel")
-	noFileDir = filepath.Join(cwd, "fixture", "no-files")
-	noSakuNoDirectiveDir = filepath.Join(cwd, "fixture", "no-saku-md-no-directive")
-	readmeDirectiveDir = filepath.Join(cwd, "fixture", "readme-directive")
+	mainDir = filepath.Join(root, "fixture", "main")
+	parallelDir = filepath.Join(root, "fixture", "parallel")
+	noFileDir = filepath.Join(root, "fixture", "no-files")
+	noSakuNoDirectiveDir = filepath.Join(root, "fixture", "no-saku-md-no-directive")
+	readmeDirectiveDir = filepath.Join(root, "fixture", "readme-directive")
 
 	os.Exit(m.Run())
 }

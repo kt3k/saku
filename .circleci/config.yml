@@ -8,7 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           key: v1
-      - run: go test -tags coverage -coverprofile=coverage.txt -covermode=atomic .
+      - run: cd pkg/saku; go test -tags coverage -coverprofile=coverage.txt -covermode=atomic .
       - save_cache:
           key: v1
           paths:

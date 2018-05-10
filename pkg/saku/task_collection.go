@@ -1,4 +1,4 @@
-package main
+package saku
 
 // TaskCollection is the model of the list of tasks.
 type TaskCollection struct {
