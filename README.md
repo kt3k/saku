@@ -185,17 +185,6 @@ Saku is the Japanese name for the Chinese character "作", which means "make". S
   - [robo][]
   - [go-task][]
 
-# Development
-
-<!-- saku start -->
-
-> # build
-> Builds the binary
-
-    go build -o saku
-
-<!-- saku end -->
-
 # History
 
 - 2018-01-31   v0.11.0   Pass options after `--`.
