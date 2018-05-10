@@ -7,6 +7,16 @@ import (
 	"github.com/simonleung8/flags"
 )
 
+func separateExtraArgs(args []string) ([]string, []string) {
+	for i, arg := range args {
+		if arg == "--" {
+			return args[:i], args[i+1:]
+		}
+	}
+
+	return args, []string{}
+}
+
 // Run saku command in the given cwd and arguments
 func Run(cwd string, args ...string) ExitCode {
 	fc := flags.New()
@@ -18,7 +28,9 @@ func Run(cwd string, args ...string) ExitCode {
 	fc.NewBoolFlag("serial", "s", "")
 	fc.NewStringFlagWithDefault("config", "c", "", defaultConfigFile)
 
-	err := fc.Parse(args...)
+	mainArgs, extraArgs := separateExtraArgs(args)
+
+	err := fc.Parse(mainArgs...)
 
 	if err != nil {
 		fmt.Println(color.RedString("Error:"), err)
@@ -56,7 +68,7 @@ func Run(cwd string, args ...string) ExitCode {
 		return actionInfo(tasks)
 	}
 
-	runOpts := &runOptions{cwd: "", fc: fc}
+	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
 
 	return actionRun(titles, tasks, runOpts)
 }

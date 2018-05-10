@@ -38,8 +38,8 @@ func TestVersionAction(t *testing.T) {
 }
 
 func TestInvalidFlag(t *testing.T) {
-	if Run(mainDir, "--") == ExitCodeOk {
-		t.Error("Should exits with error if called with --")
+	if Run(mainDir, "---") == ExitCodeOk {
+		t.Error("Should exits with error if called with ---")
 	}
 }
 
@@ -134,5 +134,11 @@ func TestParallelRaceFail(t *testing.T) {
 
 	if code == ExitCodeOk {
 		t.Error("Should exit with error if the first task failed")
+	}
+}
+
+func TestExtraParam(t *testing.T) {
+	if Run(mainDir, "fail-without-extra-args", "--", "arg") == ExitCodeError {
+		t.Error("Should handle extra args after `--`")
 	}
 }

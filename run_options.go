@@ -6,8 +6,9 @@ import (
 )
 
 type runOptions struct {
-	cwd string
-	fc  flags.FlagContext
+	cwd       string
+	fc        flags.FlagContext
+	extraArgs []string
 }
 
 func (r *runOptions) runLabel() string {

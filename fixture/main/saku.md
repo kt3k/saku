@@ -18,3 +18,7 @@
 # nodesc
 
     echo nodesc
+
+# fail-without-extra-args
+
+    go run fixture/main/fail-without-extra-args.go

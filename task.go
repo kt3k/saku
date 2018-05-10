@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/fatih/color"
 )
@@ -34,7 +35,7 @@ type taskOptions struct {
 // Runs a task.
 func (t *task) run(opts *runOptions, c chan error) {
 	for _, command := range t.commands {
-		err := t.runSingleCommand(command)
+		err := t.runSingleCommand(command, opts)
 
 		if err != nil {
 			c <- err
@@ -46,9 +47,13 @@ func (t *task) run(opts *runOptions, c chan error) {
 }
 
 // Runs a single command
-func (t *task) runSingleCommand(command string) error {
+func (t *task) runSingleCommand(command string, opts *runOptions) error {
 	if t.aborted {
 		return nil
+	}
+
+	if len(opts.extraArgs) > 0 {
+		command = command + " " + strings.Join(opts.extraArgs, " ")
 	}
 
 	fmt.Println("+" + command)
