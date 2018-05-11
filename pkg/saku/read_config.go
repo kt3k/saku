@@ -21,9 +21,7 @@ func readConfig(cwd string, configFile string) ([]byte, error) {
 	data, err := ioutil.ReadFile(absPath)
 
 	if err == nil {
-		if !invokedInSaku() {
-			fmt.Println("Read", prependEmoji("🔎", color.MagentaString(absPath), emojiEnabled()))
-		}
+		printReading(absPath)
 		return data, nil
 	}
 
@@ -42,5 +40,12 @@ func readConfig(cwd string, configFile string) ([]byte, error) {
 		return []byte{}, errors.New("No <!-- saku start --><!-- saku end --> directive found")
 	}
 
+	printReading(absPath)
 	return patternEmbedDirective.FindSubmatch(data)[1], nil
+}
+
+func printReading(path string) {
+	if !invokedInSaku() {
+		fmt.Println("Read", prependEmoji("🔎", color.MagentaString(path), emojiEnabled()))
+	}
 }
