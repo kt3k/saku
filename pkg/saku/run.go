@@ -54,7 +54,8 @@ func Run(cwd string, args ...string) ExitCode {
 			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
 		} else {
 			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
-			fmt.Println("  And <!-- saku start --><!-- saku end --> directive not found in README.md as well")
+			fmt.Println("  First you need to set up", color.CyanString("saku.md"))
+			fmt.Println("  See", color.MagentaString("https://github.com/kt3k/saku"), "for details")
 		}
 
 		return ExitCodeError
