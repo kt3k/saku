@@ -1,5 +1,5 @@
 ---
-version: 0.1.6
+version: 1.0.0
 commit: ":bookmark: chore: bump to version %.%.%"
 files:
   README.md:

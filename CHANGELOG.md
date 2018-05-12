@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+## [v1.0.0] - 2018-05-12
 ## [v0.1.6] - 2018-05-12
 ## [v0.1.5] - 2018-05-12
 ## [v0.1.4] - 2018-05-12
@@ -38,7 +39,8 @@
 - add usage
 - add cli options
 
-[Unreleased]: https://github.com/kt3k/saku/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/kt3k/saku/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/kt3k/saku/compare/v0.1.6...v1.0.0
 [v0.1.6]: https://github.com/kt3k/saku/compare/v0.1.5...v0.1.6
 [v0.1.5]: https://github.com/kt3k/saku/compare/v0.1.4...v0.1.5
 [v0.1.4]: https://github.com/kt3k/saku/compare/v0.1.3...v0.1.4
