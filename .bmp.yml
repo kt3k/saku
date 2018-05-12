@@ -1,5 +1,5 @@
 ---
-version: 0.1.4
+version: 0.1.5
 commit: ":bookmark: chore: bump to version %.%.%"
 files:
   README.md:
@@ -7,4 +7,4 @@ files:
   - https://github.com/kt3k/saku/releases/tag/v%.%.%
   pkg/saku/const.go: "%.%.%"
   saku.md:
-  - ./update_saku.sh %.%.%
+  - "./update_saku.sh %.%.%"
