@@ -1,6 +1,6 @@
 <img width="150" src="https://kt3k.github.io/saku/media/saku-logo.svg" />
 
-# saku (作) v0.1.1 WIP
+# saku (作) v0.1.2 WIP
 
 [![CircleCI](https://circleci.com/gh/kt3k/saku.svg?style=svg)](https://circleci.com/gh/kt3k/saku)
 [![Build status](https://ci.appveyor.com/api/projects/status/56lo7khd1an83lh3?svg=true)](https://ci.appveyor.com/project/kt3k/saku-elt31)
@@ -202,4 +202,4 @@ MIT
 [robo]: https://github.com/tj/robo
 [go-task]: https://github.com/go-task/task
 [node-saku]: https://github.com/kt3k/node-saku
-[release page]: https://github.com/kt3k/saku/releases/tag/0.1.1
+[release page]: https://github.com/kt3k/saku/releases/tag/0.1.2
