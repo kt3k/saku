@@ -1,0 +1,9 @@
+builds:
+  - binary: saku
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - 386

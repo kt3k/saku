@@ -4,7 +4,6 @@
 > Cleans the workspace
 
     rm -rf dist
-    rm -rf $GOPATH/bin/saku
     rm -f coverage.txt
 
 # install
@@ -12,16 +11,11 @@
 
     go install
 
-# dist
-> Builds the assets for release
-
-    gox -os="darwin linux windows" -arch="amd64 386" -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
-
 # release
 > Releases saku
 
-    saku clean dist
-    ghr dist/
+    saku clean
+    goreleaser
 
 # test
 > Runs the tests
