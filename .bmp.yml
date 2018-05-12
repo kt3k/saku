@@ -4,5 +4,5 @@ commit: 'chore: bump to version %.%.%'
 files:
   README.md:
   - saku (作) v%.%.%
-  - https://github.com/kt3k/saku/releases/tag/%.%.%
+  - https://github.com/kt3k/saku/releases/tag/v%.%.%
   pkg/saku/const.go: "%.%.%"

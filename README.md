@@ -220,4 +220,4 @@ MIT
 [robo]: https://github.com/tj/robo
 [go-task]: https://github.com/go-task/task
 [node-saku]: https://github.com/kt3k/node-saku
-[release page]: https://github.com/kt3k/saku/releases/tag/0.1.2
+[release page]: https://github.com/kt3k/saku/releases/tag/v0.1.2
