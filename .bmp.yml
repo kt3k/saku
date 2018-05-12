@@ -2,5 +2,7 @@
 version: 0.1.0
 commit: 'chore: bump to version %.%.%'
 files:
-  README.md: v%.%.%
-  const.go: '%.%.%'
+  README.md:
+    - saku (作) v%.%.%
+    - https://github.com/kt3k/saku/releases/tag/%.%.%
+  pkg/saku/const.go: '%.%.%'

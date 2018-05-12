@@ -14,7 +14,11 @@ This repository is WIP port of [node-saku][].
 
 # :cd: Install
 
+**Go users**
+
     go get -u github.com/kt3k/saku
+
+Or download binary from the [release page][].
 
 # Usage
 
@@ -198,3 +202,4 @@ MIT
 [robo]: https://github.com/tj/robo
 [go-task]: https://github.com/go-task/task
 [node-saku]: https://github.com/kt3k/node-saku
+[release page]: https://github.com/kt3k/saku/releases/tag/0.1.0

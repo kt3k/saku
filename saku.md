@@ -1,14 +1,27 @@
+<img width="150" src="https://kt3k.github.io/saku/media/saku-logo.svg" />
+
 # clean
 > Cleans the workspace
 
+    rm -rf dist
     rm -rf $GOPATH/bin/saku
     rm -f coverage.txt
-    rm saku
 
-# build
-> Builds the binary
+# install
+> builds and installs it locally
 
-    go build -o saku
+    go install
+
+# dist
+> Builds the assets for release
+
+    gox -os="darwin linux windows" -arch="amd64 386" -output="dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
+
+# release
+> Releases saku
+
+    saku clean dist
+    ghr dist/
 
 # test
 > Runs the tests
