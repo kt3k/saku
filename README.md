@@ -10,7 +10,7 @@
 
 `saku` is a simple task runner based on markdown syntax. You can define and describe your tasks in markdown file `saku.md` and execute them with `saku` command.
 
-This repository is WIP port of [node-saku][].
+(You can optionally define tasks in `README.md`. See [The below](#embed-sakumd-in-readmemd) for details.)
 
 # :cd: Install
 
@@ -18,9 +18,13 @@ This repository is WIP port of [node-saku][].
 
     go get -u github.com/kt3k/saku
 
+**Mac OS users**
+
+    brew install kt3k/tap/saku
+
 Or download binary from the [release page][].
 
-# Usage
+# :leaves: Usage
 
 First, create a markdown file `saku.md`:
 
@@ -46,9 +50,9 @@ First, create a markdown file `saku.md`:
 
 The above defines 4 tasks `build` `test` `js` `css`. (A heading (#) is a task title!)
 
-If you hit the command `saku build`, it invokes `build` task, `go build -v -i main.go` in the above example.
+If you hit `saku` (without arguments) it shows the list of the descriptions of the all tasks.
 
-If you hit `saku --info` it shows the list of the descriptions of the all tasks.
+If you hit the command `saku build`, it invokes `build` task, `go build -v -i main.go` in the above example.
 
 **Note**: 4-space or tab indent makes code block in markdown syntax. See [here](https://daringfireball.net/projects/markdown/syntax#precode)
 
@@ -82,17 +86,31 @@ The above defines the task `build`, which has the description `Build the go bina
 
 ## Parallel execution
 
-`saku` command has `-p, --parallel` option. You can run tasks in parallel like the below:
+With `-p, --parallel` option, you can run tasks in parallel like the below:
 
 ```
-saku -p watch-js run-server
+saku -p watch-scripts run-server
 ```
 
-## Use `saku` in `saku.md`
+## Race execution
 
-If you need to invoke tasks from another task, use saku command in saku.md.
+With `-r, --race` option, you can run tasks in parallel and terminate tasks when the first task finished. This is useful for testing servers.
+
+This option takes effect only when `-p` option is specified.
+
+```
+saku -p -r run-server test-server
+```
+
+## Nesting tasks (Dependency of tasks)
+
+You can use `saku` in `saku.md` like below:
 
 ```md
+# dist
+
+    saku js minify
+
 # js
 
     browserify src/main.js > build/app.js
@@ -100,15 +118,17 @@ If you need to invoke tasks from another task, use saku command in saku.md.
 # minify
 
     uglify-js < build/app.js > build/app.min.js
-
-# dist
-
-    saku -s js minify
 ```
+
+In this way, you can express the dependencies of tasks.
 
 If you need to invoke tasks in parallel from another task, use `saku -p`.
 
 ```md
+# start
+
+    saku -p serve watch
+
 # watch
 
     my-watcher
@@ -116,10 +136,6 @@ If you need to invoke tasks in parallel from another task, use `saku -p`.
 # serve
 
     my-server
-
-# start
-
-    saku -p serve watch
 ```
 
 # CLI Usage
@@ -144,9 +160,11 @@ The extra options after '--' are passed to each task command.
 
 # Notes
 
-## Embed `saku.md` in README.md
+## Embed `saku.md` in `README.md`
 
-You can optionally embed `saku.md` in README.md. See the below for details.
+You can optionally embed `saku.md` in `README.md`. See the below for details.
+
+README.md
 
 ```md
 # Development
@@ -166,7 +184,7 @@ These are the commands for development. You can invoke them with `saku` command.
 <!-- saku end -->
 ```
 
-The contents between `<!-- saku start -->` and `<!-- saku end -->` are used as `saku.md`. You can write them as if they are the part of your README.
+The contents between `<!-- saku start -->` and `<!-- saku end -->` are used as `saku.md`. You can write them as if they are the part of your `README.md`.
 
 ## Example use cases
 
