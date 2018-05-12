@@ -1,6 +1,6 @@
 ---
-version: 0.1.2
-commit: ':bookmark: chore: bump to version %.%.%'
+version: 0.1.3
+commit: ":bookmark: chore: bump to version %.%.%"
 files:
   README.md:
   - saku (作) v%.%.%
