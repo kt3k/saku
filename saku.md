@@ -44,6 +44,4 @@
 # changelog
 > Creates the change log
 
-    git tag v0.1.0
-    git-chglog v0.1.0
-    git tag -d v0.1.0
+    git-chglog --next-tag v0.1.5 -o CHANGELOG.md

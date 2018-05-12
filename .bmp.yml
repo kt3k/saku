@@ -9,3 +9,4 @@ files:
   saku.md:
   - "./update_saku.sh %.%.%"
   - "update saku (%.%.%)"
+  - "--next-tag v%.%.%"
