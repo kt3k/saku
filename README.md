@@ -1,6 +1,6 @@
 <img width="150" src="https://kt3k.github.io/saku/media/saku-logo.svg" />
 
-# saku (作) v0.1.6 WIP
+# saku (作) v0.1.6
 
 [![CircleCI](https://circleci.com/gh/kt3k/saku.svg?style=svg)](https://circleci.com/gh/kt3k/saku)
 [![Build status](https://ci.appveyor.com/api/projects/status/56lo7khd1an83lh3?svg=true)](https://ci.appveyor.com/project/kt3k/saku-elt31)
