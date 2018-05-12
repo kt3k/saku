@@ -3,3 +3,6 @@
 
 # cov
 coverage.txt
+
+# brew tap
+/homebrew-tap

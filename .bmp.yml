@@ -6,3 +6,5 @@ files:
   - saku (作) v%.%.%
   - https://github.com/kt3k/saku/releases/tag/v%.%.%
   pkg/saku/const.go: "%.%.%"
+  saku.md:
+  - ./update_saku.sh %.%.%
