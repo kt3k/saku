@@ -66,6 +66,7 @@ The above is a code block of `echo hello` for the first line and `echo world` fo
 # `saku.md` Rules
 
 - Heading (# title) starts the task definition.
+  - All levels of headings (#, ##, ###,...) has the same effect.
 - Code blocks are commands.
   - Code blocks can have multiple commands. They will be executed sequentially.
 - Blockquotes are description of the task.
