@@ -75,6 +75,12 @@ func TestInfoAction(t *testing.T) {
 	}
 }
 
+func TestInfoOption(t *testing.T) {
+	if Run(mainDir, "--info", "hello") == ExitCodeError {
+		t.Error("--info option invokes info action and exits with 0")
+	}
+}
+
 func TestParallelAndSeriallOptions(t *testing.T) {
 	if Run(mainDir, "--serial", "--parallel", "hello") == ExitCodeOk {
 		t.Error("It is error if both --serial and --parallel specified")

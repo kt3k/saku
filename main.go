@@ -5,7 +5,7 @@ package main
 import (
 	"os"
 
-	saku "github.com/kt3k/saku/pkg/saku"
+	"github.com/kt3k/saku/pkg/saku"
 )
 
 func main() {

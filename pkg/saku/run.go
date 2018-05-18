@@ -26,6 +26,7 @@ func Run(cwd string, args ...string) ExitCode {
 	fc.NewBoolFlag("parallel", "p", "Runs tasks in parallel.")
 	fc.NewBoolFlag("race", "r", "")
 	fc.NewBoolFlag("serial", "s", "")
+	fc.NewBoolFlag("info", "i", "")
 	fc.NewStringFlagWithDefault("config", "c", "", defaultConfigFile)
 
 	mainArgs, extraArgs := separateExtraArgs(args)
@@ -65,7 +66,7 @@ func Run(cwd string, args ...string) ExitCode {
 
 	titles := fc.Args()
 
-	if len(titles) == 0 {
+	if len(titles) == 0 || fc.Bool("info") {
 		return actionInfo(tasks)
 	}
 
