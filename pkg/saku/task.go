@@ -2,7 +2,6 @@ package saku
 
 import (
 	"errors"
-	"fmt"
 	"os/exec"
 	"strings"
 
@@ -13,7 +12,6 @@ type task struct {
 	title        string
 	descriptions []string
 	commands     []string
-	options      taskOptions
 	aborted      bool
 	cmd          *exec.Cmd
 }
@@ -23,19 +21,15 @@ func newTask() task {
 		title:        "",
 		descriptions: []string{},
 		commands:     []string{},
-		options:      taskOptions{},
 		aborted:      false,
 		cmd:          nil,
 	}
 }
 
-type taskOptions struct {
-}
-
 // Runs a task.
-func (t *task) run(opts *runOptions, c chan error) {
+func (t *task) run(opts *runOptions, c chan error, onCommand chan string) {
 	for _, command := range t.commands {
-		err := t.runSingleCommand(command, opts)
+		err := t.runSingleCommand(command, opts, onCommand)
 
 		if err != nil {
 			c <- err
@@ -47,7 +41,7 @@ func (t *task) run(opts *runOptions, c chan error) {
 }
 
 // Runs a single command
-func (t *task) runSingleCommand(command string, opts *runOptions) error {
+func (t *task) runSingleCommand(command string, opts *runOptions, onCommand chan string) error {
 	if t.aborted {
 		return nil
 	}
@@ -56,7 +50,7 @@ func (t *task) runSingleCommand(command string, opts *runOptions) error {
 		command = command + " " + strings.Join(opts.extraArgs, " ")
 	}
 
-	fmt.Println("+" + command)
+	onCommand <- command
 	t.cmd = execCommand(command)
 
 	if t.cmd.Run() != nil {

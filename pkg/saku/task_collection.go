@@ -5,6 +5,7 @@ type TaskCollection struct {
 	currentTask *task
 	tasks       []*task
 	taskMap     map[string]*task
+	onCommand   chan string
 }
 
 // Creates a new task collection.
@@ -17,6 +18,7 @@ func newTaskCollection() *TaskCollection {
 		currentTask: &t,
 		tasks:       []*task{},
 		taskMap:     map[string]*task{},
+		onCommand:   make(chan string, 1),
 	}
 }
 
@@ -35,7 +37,7 @@ func (tc *TaskCollection) runSequentially(opts *runOptions) error {
 	c := make(chan error)
 
 	for _, t := range tc.tasks {
-		go t.run(opts, c)
+		go t.run(opts, c, tc.onCommand)
 
 		err := <-c
 
@@ -52,7 +54,7 @@ func (tc *TaskCollection) runParallel(opts *runOptions) error {
 
 	for i := range tc.tasks {
 		t := tc.tasks[i]
-		go t.run(opts, c)
+		go t.run(opts, c, tc.onCommand)
 	}
 
 	for range tc.tasks {
@@ -71,7 +73,7 @@ func (tc *TaskCollection) runInRace(opts *runOptions) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
-		go tc.tasks[i].run(opts, c)
+		go tc.tasks[i].run(opts, c, tc.onCommand)
 	}
 
 	defer tc.abort()
@@ -117,6 +119,7 @@ func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 		currentTask: tasks[len(tasks)-1],
 		tasks:       tasks,
 		taskMap:     taskMap,
+		onCommand:   tc.onCommand,
 	}
 }
 

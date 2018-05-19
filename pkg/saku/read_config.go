@@ -2,7 +2,6 @@ package saku
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"regexp"
@@ -15,13 +14,13 @@ const defaultConfigFile = "saku.md"
 var patternEmbedDirective = regexp.MustCompile(`(?ism)<!--\s*saku\s+start\s*-->(.*)<!--\s*saku\s+end\s*-->`)
 
 // Reads task config from markdown files
-func readConfig(cwd string, configFile string) ([]byte, error) {
+func readConfig(cwd string, configFile string, l *logger) ([]byte, error) {
 	absPath := filepath.Join(cwd, configFile)
 
 	data, err := ioutil.ReadFile(absPath)
 
 	if err == nil {
-		printReading(absPath)
+		printReading(absPath, l)
 		return data, nil
 	}
 
@@ -40,12 +39,12 @@ func readConfig(cwd string, configFile string) ([]byte, error) {
 		return []byte{}, errors.New("No <!-- saku start --><!-- saku end --> directive found")
 	}
 
-	printReading(absPath)
+	printReading(absPath, l)
 	return patternEmbedDirective.FindSubmatch(data)[1], nil
 }
 
-func printReading(path string) {
+func printReading(path string, l *logger) {
 	if !invokedInSaku() {
-		fmt.Println("Read", prependEmoji("🔎", color.MagentaString(path), emojiEnabled()))
+		l.println("Read", prependEmoji("🔎", color.MagentaString(path), emojiEnabled()))
 	}
 }

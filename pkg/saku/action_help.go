@@ -21,7 +21,7 @@ func actionHelp() ExitCode {
     -r, --race  - - - - - Set the flag to kill all tasks when a task
                           finished with zero. This option is valid only
                           with 'parallel' option.
-    -q, --quiet   - - - - Stops the logging.
+    -q, --quiet   - - - - Prints less messages.
 
   The extra options after '--' are passed to each task command.
 

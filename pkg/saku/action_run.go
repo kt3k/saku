@@ -10,7 +10,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) ExitCode {
+func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOptions) ExitCode {
 	done := make(chan error, 1)
 	sigs := make(chan os.Signal, 1)
 
@@ -30,13 +30,13 @@ func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) Exit
 
 	runTasks := tasks.filterByTitles(titles)
 
-	fmt.Print(color.CyanString("[saku]"), " Run ", color.MagentaString(strings.Join(titles, ", ")))
+	l.print(color.CyanString("[saku]"), " Run ", color.MagentaString(strings.Join(titles, ", ")))
 
 	if len(titles) > 1 {
-		fmt.Print(" ", runOpts.runLabel())
+		l.print(" ", runOpts.runLabel())
 	}
 
-	fmt.Println()
+	l.println()
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 
@@ -47,6 +47,13 @@ func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) Exit
 
 		done <- fmt.Errorf("aborted: signal=%s", sig)
 	}()
+
+	go func () {
+		for {
+			l.println("+", <-runTasks.onCommand)
+		}
+	}()
+
 
 	go func() {
 		done <- runTasks.Run(runOpts)
@@ -60,15 +67,15 @@ func actionRun(titles []string, tasks *TaskCollection, runOpts *runOptions) Exit
 		return ExitCodeError
 	}
 
-	fmt.Print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
+	l.print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
 
-	fmt.Print(color.MagentaString(strings.Join(titles, ", ")))
+	l.print(color.MagentaString(strings.Join(titles, ", ")))
 
 	if len(titles) > 1 {
-		fmt.Print(" ", runOpts.runLabel())
+		l.print(" ", runOpts.runLabel())
 	}
 
-	fmt.Println()
+	l.println()
 
 	return ExitCodeOk
 }

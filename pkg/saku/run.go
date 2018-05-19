@@ -27,6 +27,7 @@ func Run(cwd string, args ...string) ExitCode {
 	fc.NewBoolFlag("race", "r", "")
 	fc.NewBoolFlag("serial", "s", "")
 	fc.NewBoolFlag("info", "i", "")
+	fc.NewBoolFlag("quiet", "q", "")
 	fc.NewStringFlagWithDefault("config", "c", "", defaultConfigFile)
 
 	mainArgs, extraArgs := separateExtraArgs(args)
@@ -46,9 +47,11 @@ func Run(cwd string, args ...string) ExitCode {
 		return actionVersion()
 	}
 
+	l := &logger{enabled: !fc.Bool("quiet")}
+
 	configFile := fc.String("config")
 
-	config, err1 := readConfig(cwd, configFile)
+	config, err1 := readConfig(cwd, configFile, l)
 
 	if err1 != nil {
 		if configFile != defaultConfigFile {
@@ -66,11 +69,11 @@ func Run(cwd string, args ...string) ExitCode {
 
 	titles := fc.Args()
 
+	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
+
 	if len(titles) == 0 || fc.Bool("info") {
 		return actionInfo(tasks)
 	}
 
-	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
-
-	return actionRun(titles, tasks, runOpts)
+	return actionRun(titles, tasks, l, runOpts)
 }
