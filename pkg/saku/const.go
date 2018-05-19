@@ -10,4 +10,4 @@ const (
 )
 
 // Version is the version number of saku.
-const Version = "1.0.0"
+const Version = "1.1.0"
