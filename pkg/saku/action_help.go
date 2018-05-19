@@ -18,7 +18,7 @@ func actionHelp() ExitCode {
     -p, --parallel  - - - Runs tasks in parallel. Default false.
     -s, --sequential  - - Runs tasks in serial. Default true.
     -c, --config <path> - Specifies the config file. Default is 'saku.md'.
-    -r, --race  - - - - - Set the flag to kill all tasks when a task
+    -r, --race  - - - - - Sets the flag to kill all tasks when a task
                           finished with zero. This option is valid only
                           with 'parallel' option.
     -q, --quiet   - - - - Prints less messages.
