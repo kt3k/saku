@@ -1,0 +1,12 @@
+{
+  "name": "saku-benchmark",
+  "description": "benchmark of go-saku and node-saku",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Yoshiya Hinosawa",
+  "private": true,
+  "dependencies": {
+    "saku": "^0.11.1"
+  }
+}
