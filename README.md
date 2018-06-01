@@ -12,6 +12,8 @@
 
 (You can optionally define tasks in `README.md`. See [The below](#embed-sakumd-in-readmemd) for details.)
 
+:bookmark: More background stories are explained in [a blog post](https://dev.to/kt3k/markdown-based-task-runner---saku-239o).
+
 # :cd: Install
 
 **Go users**
