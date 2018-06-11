@@ -31,7 +31,7 @@ Or download binary from the [release page][].
 
 First, create a markdown file `saku.md`:
 
-```md
+````markdown
 # build
 > Build the go binary.
 
@@ -49,7 +49,7 @@ First, create a markdown file `saku.md`:
 # css
 
     minify -o public/style.css src/css
-```
+````
 
 The above defines 4 tasks `build` `test` `js` `css`. (A heading (#) is a task title!)
 
@@ -59,10 +59,10 @@ If you hit the command `saku build`, it invokes `build` task, `go build -v -i ma
 
 **Note**: 4-space or tab indent makes code block in markdown syntax. See [here](https://daringfireball.net/projects/markdown/syntax#precode)
 
-```md
+````markdown
     echo hello
     echo world
-```
+````
 
 The above is a code block of `echo hello` for the first line and `echo world` for the second line.
 
@@ -78,13 +78,13 @@ The above is a code block of `echo hello` for the first line and `echo world` fo
 
 For example:
 
-```
+````markdown
 # build
 > Build the go binary.
 
     echo Starting build go binary
     go build -v -i main.go
-```
+````
 
 The above defines the task `build`, which has the description `Build the go binary.`. It has two commands `echo Starting build go binary` and `go build -v -i main.go` and they run in sequence.
 
@@ -110,7 +110,7 @@ saku -p -r run-server test-server
 
 You can use `saku` in `saku.md` like below:
 
-```md
+````markdown
 # dist
 
     saku js minify
@@ -122,13 +122,13 @@ You can use `saku` in `saku.md` like below:
 # minify
 
     uglify-js < build/app.js > build/app.min.js
-```
+````
 
 In this way, you can express the dependencies of tasks.
 
 If you need to invoke tasks in parallel from another task, use `saku -p`.
 
-```md
+````markdown
 # start
 
     saku -p serve watch
@@ -140,7 +140,7 @@ If you need to invoke tasks in parallel from another task, use `saku -p`.
 # serve
 
     my-server
-```
+````
 
 # CLI Usage
 
@@ -170,7 +170,7 @@ You can optionally embed `saku.md` in `README.md`. See the below for details.
 
 README.md
 
-```md
+````markdown
 # Development
 
 These are the commands for development. You can invoke them with `saku` command.
@@ -186,7 +186,7 @@ These are the commands for development. You can invoke them with `saku` command.
     go test -race ./...
 
 <!-- saku end -->
-```
+````
 
 The contents between `<!-- saku start -->` and `<!-- saku end -->` are used as `saku.md`. You can write them as if they are the part of your `README.md`.
 
