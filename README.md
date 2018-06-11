@@ -5,6 +5,7 @@
 [![CircleCI](https://circleci.com/gh/kt3k/saku.svg?style=svg)](https://circleci.com/gh/kt3k/saku)
 [![Build status](https://ci.appveyor.com/api/projects/status/56lo7khd1an83lh3?svg=true)](https://ci.appveyor.com/project/kt3k/saku-elt31)
 [![codecov](https://codecov.io/gh/kt3k/saku/branch/master/graph/badge.svg)](https://codecov.io/gh/kt3k/saku)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kt3k/saku)](https://goreportcard.com/report/github.com/kt3k/saku)
 
 > Markdown-based task runner
 
