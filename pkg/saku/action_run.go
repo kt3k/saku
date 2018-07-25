@@ -14,18 +14,20 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 	done := make(chan error, 1)
 	sigs := make(chan os.Signal, 1)
 
+	if runOpts.isSerialAndParallel() {
+		l.printlnError("both --serial and --parallel options are specified")
+
+		return ExitCodeError
+	}
+
 	for _, title := range titles {
 		_, ok := tasks.getByTitle(title)
 
 		if !ok {
-			fmt.Println(color.RedString("Error:"), "Task not defined:", title)
+			l.printlnError("Task not defined:", title)
+
 			return ExitCodeError
 		}
-	}
-
-	if runOpts.isSerialAndParallel() {
-		fmt.Println(color.RedString("Error:"), "both --serial and --parallel options are specified")
-		return ExitCodeError
 	}
 
 	runTasks := tasks.filterByTitles(titles)
@@ -52,10 +54,10 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 		done <- runTasks.Run(runOpts)
 	}()
 
-	err0 := <-done
+	err := <-done
 
-	if err0 != nil {
-		fmt.Println(color.RedString("Error:"), err0)
+	if err != nil {
+		l.printlnError(err)
 
 		return ExitCodeError
 	}
