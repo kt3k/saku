@@ -30,13 +30,7 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 
 	runTasks := tasks.filterByTitles(titles)
 
-	l.print(color.CyanString("[saku]"), " Run ", color.MagentaString(strings.Join(titles, ", ")))
-
-	if len(titles) > 1 {
-		l.print(" ", runOpts.runLabel())
-	}
-
-	l.println()
+	logLine("Run", titles, l, runOpts)
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 
@@ -48,12 +42,11 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 		done <- fmt.Errorf("aborted: signal=%s", sig)
 	}()
 
-	go func () {
+	go func() {
 		for {
-			l.println("+", <-runTasks.onCommand)
+			l.println("+" + <-runTasks.onCommand)
 		}
 	}()
-
 
 	go func() {
 		done <- runTasks.Run(runOpts)
@@ -67,15 +60,20 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 		return ExitCodeError
 	}
 
-	l.print(color.CyanString("[saku]"), " ", prependEmoji("✨", "Finish ", emojiEnabled() && !invokedInSaku()))
+	logLine(prependEmoji("✨", "Finish", emojiEnabled() && !invokedInSaku()), titles, l, runOpts)
+
+	return ExitCodeOk
+}
+
+// logLine logs a line of saku's phase message.
+func logLine(phaseLabel string, titles []string, l *logger, runOpts *runOptions) {
+	l.print(color.CyanString("[saku]"), " ", phaseLabel, " ")
 
 	l.print(color.MagentaString(strings.Join(titles, ", ")))
 
 	if len(titles) > 1 {
-		l.print(" ", runOpts.runLabel())
+		l.print(" in ", color.CyanString(string(runOpts.runMode())))
 	}
 
 	l.println()
-
-	return ExitCodeOk
 }

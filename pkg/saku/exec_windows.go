@@ -8,6 +8,7 @@ import (
 	"strconv"
 )
 
+// Executes the given string as command
 func execCommand(command string) *exec.Cmd {
 	cmd := exec.Command("cmd.exe", "/s", "/c", command)
 
@@ -18,6 +19,7 @@ func execCommand(command string) *exec.Cmd {
 	return cmd
 }
 
+// Terminates the given command
 func terminateCommand(cmd *exec.Cmd) error {
 	if cmd == nil || cmd.Process == nil {
 		return nil

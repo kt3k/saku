@@ -1,7 +1,6 @@
 package saku
 
 import (
-	"github.com/fatih/color"
 	"github.com/simonleung8/flags"
 )
 
@@ -11,13 +10,13 @@ type runOptions struct {
 	extraArgs []string
 }
 
-func (r *runOptions) runLabel() string {
+func (r *runOptions) runMode() RunMode {
 	if r.isParallel() {
-		return "in " + color.CyanString("parallel")
+		return RunModeParallel
 	} else if r.isRace() {
-		return "in " + color.CyanString("parallel-race")
+		return RunModeParallelRace
 	} else {
-		return "in " + color.CyanString("sequence")
+		return RunModeSequence
 	}
 }
 
