@@ -150,3 +150,9 @@ func TestExtraParam(t *testing.T) {
 		t.Error("Should handle extra args after `--`")
 	}
 }
+
+func TestHierarchicalTask(t *testing.T) {
+	if Run(mainDir, "parent-task", "--", "arg") == ExitCodeError {
+		t.Error("Should run hierarchical tasks")
+	}
+}

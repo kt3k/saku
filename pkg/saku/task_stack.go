@@ -19,22 +19,6 @@ func (ts *taskStack) appended(t *task) *taskStack {
 	}
 }
 
-func (ts *taskStack) push(t *task) {
-	ts.tasks = append(ts.tasks, t)
-}
-
-func (ts *taskStack) pop() *task {
-	if ts.isEmpty() {
-		return nil
-	}
-
-	t := ts.tasks[len(ts.tasks)-1]
-
-	ts.tasks = ts.tasks[:len(ts.tasks)-1]
-
-	return t
-}
-
 func (ts *taskStack) isEmpty() bool {
 	return len(ts.tasks) == 0
 }

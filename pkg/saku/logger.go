@@ -56,5 +56,5 @@ func (l *logger) logStart(tc *TaskCollection, stack *taskStack) {
 }
 
 func (l *logger) logEnd(tc *TaskCollection, stack *taskStack) {
-	l.logPhase(prependEmoji("✨", "Finish", emojiEnabled() && !invokedInSaku()), tc, stack)
+	l.logPhase(prependEmoji("✨", "Finish", emojiEnabled() && !invokedInSaku() && stack.isEmpty()), tc, stack)
 }

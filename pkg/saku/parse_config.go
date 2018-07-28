@@ -1,7 +1,6 @@
 package saku
 
 import (
-	"fmt"
 	"strings"
 
 	"gopkg.in/russross/blackfriday.v2"
@@ -18,7 +17,6 @@ func ParseConfig(config *[]byte) *TaskCollection {
 		if node.Type == blackfriday.Heading {
 			/* Heading > Text */
 			title := string(node.FirstChild.Literal)
-			fmt.Println(title, node.Level)
 
 			currentTask = tasks.gotNewTask(node.Level, title)
 		} else if node.Type == blackfriday.BlockQuote {

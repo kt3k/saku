@@ -27,17 +27,25 @@ func (tc *TaskCollection) SetRunMode(mode RunMode) {
 
 // Run runs the tasks.
 func (tc *TaskCollection) Run(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
+	var err error
 	l.logStart(tc, stack)
-	defer l.logEnd(tc, stack)
 
 	switch tc.mode {
 	case RunModeParallel:
-		return tc.runParallel(opts, channels, stack, l)
+		err = tc.runParallel(opts, channels, stack, l)
 	case RunModeParallelRace:
-		return tc.runInRace(opts, channels, stack, l)
+		err = tc.runInRace(opts, channels, stack, l)
 	default:
-		return tc.runSequentially(opts, channels, stack, l)
+		err = tc.runSequentially(opts, channels, stack, l)
 	}
+
+	if err != nil {
+		return err
+	}
+
+	l.logEnd(tc, stack)
+
+	return nil
 }
 
 func (tc *TaskCollection) runSequentially(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
