@@ -1,22 +1,27 @@
 <img width="150" src="https://kt3k.github.io/saku/media/saku-logo.svg" />
 
 # foo
+> desc foo
 
     echo foo
 
 ## bar
+> desc bar
 
     echo bar
 
 ## baz
+> desc baz
 
     echo baz
 
 ### qux
+> desc qux
 
     echo qux
 
 ### quux
+> desc quux
 
     echo quux
 

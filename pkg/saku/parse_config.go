@@ -1,12 +1,15 @@
 package saku
 
 import (
-	"gopkg.in/russross/blackfriday.v2"
+	"fmt"
 	"strings"
+
+	"gopkg.in/russross/blackfriday.v2"
 )
 
 // ParseConfig parses the given config markdown and returns tasks.
 func ParseConfig(config *[]byte) *TaskCollection {
+	currentTask := newTask(0)
 	tasks := newTaskCollection()
 
 	node := blackfriday.New().Parse(*config).FirstChild
@@ -15,9 +18,9 @@ func ParseConfig(config *[]byte) *TaskCollection {
 		if node.Type == blackfriday.Heading {
 			/* Heading > Text */
 			title := string(node.FirstChild.Literal)
+			fmt.Println(title, node.Level)
 
-			tasks.newTask()
-			tasks.setCurrentTaskTitle(title)
+			currentTask = tasks.gotNewTask(node.Level, title)
 		} else if node.Type == blackfriday.BlockQuote {
 			/* BlockQuote > Paragraph */
 			p := node.FirstChild
@@ -27,7 +30,7 @@ func ParseConfig(config *[]byte) *TaskCollection {
 				description := string(p.FirstChild.Literal)
 
 				for _, desc := range strings.Split(description, "\n") {
-					tasks.addCurrentTaskDescription(desc)
+					currentTask.addDescription(desc)
 				}
 
 				p = p.Next
@@ -39,7 +42,7 @@ func ParseConfig(config *[]byte) *TaskCollection {
 
 			for _, command := range commands {
 				if strings.Trim(command, " \t\r") != "" {
-					tasks.addCurrentTaskCommands([]string{command})
+					currentTask.addCommands([]string{command})
 				}
 			}
 		}

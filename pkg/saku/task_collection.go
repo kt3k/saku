@@ -6,19 +6,17 @@ import (
 
 // TaskCollection is the model of the list of tasks.
 type TaskCollection struct {
-	currentTask *task
-	tasks       []*task
-	taskMap     map[string]*task
-	mode        RunMode
+	tasks   []*task
+	taskMap map[string]*task
+	mode    RunMode
 }
 
 // Creates a new task collection.
 func newTaskCollection() *TaskCollection {
 	return &TaskCollection{
-		currentTask: nil,
-		tasks:       []*task{},
-		taskMap:     map[string]*task{},
-		mode:        RunModeSequence,
+		tasks:   []*task{},
+		taskMap: map[string]*task{},
+		mode:    RunModeSequence,
 	}
 }
 
@@ -96,23 +94,29 @@ func (tc *TaskCollection) abort() {
 	}
 }
 
-func (tc *TaskCollection) newTask() {
-	t := newTask()
+// appendNewTask appends a new task of the given level.
+func (tc *TaskCollection) appendNewTask(level int, title string) *task {
+	t := newTask(level)
+	t.setTitle(title)
 	tc.tasks = append(tc.tasks, t)
-	tc.currentTask = t
+	tc.taskMap[title] = t
+	return t
 }
 
-func (tc *TaskCollection) setCurrentTaskTitle(title string) {
-	tc.currentTask.setTitle(title)
-	tc.taskMap[title] = tc.currentTask
+func (tc *TaskCollection) gotNewTask(level int, title string) *task {
+	if tc.isEmpty() || tc.lastTask().level >= level {
+		return tc.appendNewTask(level, title)
+	}
+
+	return tc.lastTask().gotNewTask(level, title)
 }
 
-func (tc *TaskCollection) addCurrentTaskDescription(description string) {
-	tc.currentTask.addDescription(description)
+func (tc *TaskCollection) isEmpty() bool {
+	return len(tc.tasks) == 0
 }
 
-func (tc *TaskCollection) addCurrentTaskCommands(commands []string) {
-	tc.currentTask.addCommands(commands)
+func (tc *TaskCollection) lastTask() *task {
+	return tc.tasks[len(tc.tasks)-1]
 }
 
 func (tc *TaskCollection) findByTitle(title string) *task {
@@ -133,7 +137,7 @@ func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 	taskMap := map[string]*task{}
 
 	for _, title := range titles {
-		t0 := newTask()
+		t0 := newTask(0)
 		t1 := tc.findByTitle(title)
 		copier.Copy(t0, t1)
 		tasks = append(tasks, t0)
@@ -141,10 +145,9 @@ func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 	}
 
 	return &TaskCollection{
-		currentTask: tasks[len(tasks)-1],
-		tasks:       tasks,
-		taskMap:     taskMap,
-		mode:        tc.mode,
+		tasks:   tasks,
+		taskMap: taskMap,
+		mode:    tc.mode,
 	}
 }
 
@@ -156,4 +159,14 @@ func (tc *TaskCollection) titles() []string {
 	}
 
 	return titles
+}
+
+func (tc *TaskCollection) taskCount() int {
+	c := 0
+
+	for _, t := range tc.tasks {
+		c += t.taskCount()
+	}
+
+	return c
 }

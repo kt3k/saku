@@ -3,7 +3,7 @@ package saku
 import "testing"
 
 func TestRunSingleCommandOfAbortedTask(t *testing.T) {
-	task := newTask()
+	task := newTask(0)
 	task.aborted = true
 
 	err := task.runSingleCommand("non-existing-command", nil, make(chan string))

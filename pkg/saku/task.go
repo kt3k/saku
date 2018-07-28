@@ -10,6 +10,7 @@ import (
 
 type task struct {
 	title        string
+	level        int
 	descriptions []string
 	commands     []string
 	aborted      bool
@@ -17,9 +18,10 @@ type task struct {
 	children     *TaskCollection
 }
 
-func newTask() *task {
+func newTask(level int) *task {
 	return &task{
 		title:        "",
+		level:        level,
 		descriptions: []string{},
 		commands:     []string{},
 		aborted:      false,
@@ -106,4 +108,20 @@ func (t *task) findByTitle(title string) *task {
 	}
 
 	return t.children.findByTitle(title)
+}
+
+func (t *task) gotNewTask(level int, title string) *task {
+	if t.children == nil {
+		t.children = newTaskCollection()
+	}
+
+	return t.children.gotNewTask(level, title)
+}
+
+func (t *task) taskCount() int {
+	if t.children == nil {
+		return 1
+	}
+
+	return t.children.taskCount() + 1
 }
