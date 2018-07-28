@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func actionInfo(tasks *TaskCollection) ExitCode {
+func actionInfo(tasks *TaskCollection) {
 	fmt.Println("There are", color.MagentaString(strconv.Itoa(len(tasks.tasks))), "task(s)")
 
 	for _, t := range tasks.tasks {
@@ -20,6 +20,4 @@ func actionInfo(tasks *TaskCollection) ExitCode {
 			fmt.Println("    " + desc)
 		}
 	}
-
-	return ExitCodeOk
 }

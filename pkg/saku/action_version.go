@@ -2,8 +2,6 @@ package saku
 
 import "fmt"
 
-func actionVersion() ExitCode {
+func actionVersion() {
 	fmt.Printf("saku@%s\n", Version)
-
-	return ExitCodeOk
 }

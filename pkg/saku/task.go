@@ -14,22 +14,24 @@ type task struct {
 	commands     []string
 	aborted      bool
 	cmd          *exec.Cmd
+	children     *TaskCollection
 }
 
-func newTask() task {
-	return task{
+func newTask() *task {
+	return &task{
 		title:        "",
 		descriptions: []string{},
 		commands:     []string{},
 		aborted:      false,
 		cmd:          nil,
+		children:     nil,
 	}
 }
 
 // Runs a task.
-func (t *task) run(opts *runOptions, c chan error, onCommand chan string) {
+func (t *task) run(opts *runOptions, c chan error, channels *taskChannels, stack *taskStack, l *logger) {
 	for _, command := range t.commands {
-		err := t.runSingleCommand(command, opts, onCommand)
+		err := t.runSingleCommand(command, opts, channels.onCommand)
 
 		if err != nil {
 			c <- err
@@ -37,7 +39,12 @@ func (t *task) run(opts *runOptions, c chan error, onCommand chan string) {
 		}
 	}
 
-	c <- nil
+	if t.children == nil {
+		c <- nil
+		return
+	}
+
+	c <- t.children.Run(opts, channels, stack.appended(t), l)
 }
 
 // Runs a single command
@@ -65,6 +72,10 @@ func (t *task) abort() {
 	if !t.aborted {
 		terminateCommand(t.cmd)
 
+		if t.children != nil {
+			t.children.abort()
+		}
+
 		t.aborted = true
 	}
 }
@@ -82,4 +93,17 @@ func (t *task) setTitle(title string) {
 // Adds the code.
 func (t *task) addCommands(commands []string) {
 	t.commands = append(t.commands, commands...)
+}
+
+// findByTitle finds the task by the given title
+func (t *task) findByTitle(title string) *task {
+	if t.title == title {
+		return t
+	}
+
+	if t.children == nil {
+		return nil
+	}
+
+	return t.children.findByTitle(title)
 }

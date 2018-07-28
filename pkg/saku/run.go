@@ -1,8 +1,6 @@
 package saku
 
 import (
-	"fmt"
-
 	"github.com/fatih/color"
 	"github.com/simonleung8/flags"
 )
@@ -32,22 +30,24 @@ func Run(cwd string, args ...string) ExitCode {
 
 	mainArgs, extraArgs := separateExtraArgs(args)
 
+	l := &logger{enabled: !fc.Bool("quiet")}
+
 	err := fc.Parse(mainArgs...)
 
 	if err != nil {
-		fmt.Println(color.RedString("Error:"), err)
+		l.printlnError(err)
 		return ExitCodeError
 	}
 
 	if fc.Bool("help") {
-		return actionHelp()
+		actionHelp()
+		return ExitCodeOk
 	}
 
 	if fc.Bool("version") {
-		return actionVersion()
+		actionVersion()
+		return ExitCodeOk
 	}
-
-	l := &logger{enabled: !fc.Bool("quiet")}
 
 	configFile := fc.String("config")
 
@@ -55,11 +55,11 @@ func Run(cwd string, args ...string) ExitCode {
 
 	if err1 != nil {
 		if configFile != defaultConfigFile {
-			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
+			l.printlnError("File not found:", configFile)
 		} else {
-			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
-			fmt.Println("  First you need to set up", color.CyanString("saku.md"))
-			fmt.Println("  See", color.MagentaString("https://github.com/kt3k/saku"), "for details")
+			l.printlnError("File not found:", configFile)
+			l.println("  First you need to set up", color.CyanString("saku.md"))
+			l.println("  See", color.MagentaString("https://github.com/kt3k/saku"), "for details")
 		}
 
 		return ExitCodeError
@@ -72,8 +72,16 @@ func Run(cwd string, args ...string) ExitCode {
 	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
 
 	if len(titles) == 0 || fc.Bool("info") {
-		return actionInfo(tasks)
+		actionInfo(tasks)
+		return ExitCodeOk
 	}
 
-	return actionRun(titles, tasks, l, runOpts)
+	err2 := actionRun(titles, tasks, l, runOpts)
+
+	if err2 != nil {
+		l.printlnError(err2)
+		return ExitCodeError
+	}
+
+	return ExitCodeOk
 }

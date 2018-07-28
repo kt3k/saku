@@ -8,6 +8,12 @@
   version = "v1.6.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/copier"
+  packages = ["."]
+  revision = "7e38e58719c33e0d44d585c4ab477a30f8cb82dd"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -48,6 +54,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "459a7529662dc0bff7936d06bce8837991155461be42ea53af40071d16f29d02"
+  inputs-digest = "a36ba74e588b44553e333e1c75bacfa6d06b6cccd9b34bc2888acccada84fbd3"
   solver-name = "gps-cdcl"
   solver-version = 1
