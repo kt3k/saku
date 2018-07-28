@@ -64,7 +64,7 @@ If you hit the command `saku build`, it invokes `build` task, `go build -v -i ma
     echo world
 ````
 
-The above is a code block of `echo hello` for the first line and `echo world` for the second line.
+The above makes the code block of the 2 lines `echo hello` and `echo world`.
 
 # `saku.md` Rules
 
