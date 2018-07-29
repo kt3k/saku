@@ -25,7 +25,6 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 	runTasks.SetRunMode(runOpts.runMode())
 
 	stack := newTaskStack()
-	channels := newTaskChannels()
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 
@@ -38,13 +37,7 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 	}()
 
 	go func() {
-		for {
-			l.println("+" + <-channels.onCommand)
-		}
-	}()
-
-	go func() {
-		done <- runTasks.Run(runOpts, channels, stack, l)
+		done <- runTasks.Run(runOpts, stack, l)
 	}()
 
 	return <-done

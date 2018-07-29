@@ -1,7 +1,7 @@
 package saku
 
 // taskStack represents the stack of tasks.
-// This is used in task execution and task parsing.
+// This is used in task execution.
 type taskStack struct {
 	tasks []*task
 }

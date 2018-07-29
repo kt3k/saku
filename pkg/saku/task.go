@@ -31,9 +31,9 @@ func newTask(level int) *task {
 }
 
 // Runs a task.
-func (t *task) run(opts *runOptions, c chan error, channels *taskChannels, stack *taskStack, l *logger) {
+func (t *task) run(opts *runOptions, c chan error, stack *taskStack, l *logger) {
 	for _, command := range t.commands {
-		err := t.runSingleCommand(command, opts, channels.onCommand)
+		err := t.runSingleCommand(command, opts, l)
 
 		if err != nil {
 			c <- err
@@ -46,11 +46,11 @@ func (t *task) run(opts *runOptions, c chan error, channels *taskChannels, stack
 		return
 	}
 
-	c <- t.children.Run(opts, channels, stack.appended(t), l)
+	c <- t.children.Run(opts, stack.appended(t), l)
 }
 
 // Runs a single command
-func (t *task) runSingleCommand(command string, opts *runOptions, onCommand chan string) error {
+func (t *task) runSingleCommand(command string, opts *runOptions, l *logger) error {
 	if t.aborted {
 		return nil
 	}
@@ -59,7 +59,7 @@ func (t *task) runSingleCommand(command string, opts *runOptions, onCommand chan
 		command = command + " " + strings.Join(opts.extraArgs, " ")
 	}
 
-	onCommand <- command
+	l.println("+" + command)
 	t.cmd = execCommand(command)
 
 	if t.cmd.Run() != nil {

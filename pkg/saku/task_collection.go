@@ -26,17 +26,17 @@ func (tc *TaskCollection) SetRunMode(mode RunMode) {
 }
 
 // Run runs the tasks.
-func (tc *TaskCollection) Run(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) Run(opts *runOptions, stack *taskStack, l *logger) error {
 	var err error
 	l.logStart(tc, stack)
 
 	switch tc.mode {
 	case RunModeParallel:
-		err = tc.runParallel(opts, channels, stack, l)
+		err = tc.runParallel(opts, stack, l)
 	case RunModeParallelRace:
-		err = tc.runInRace(opts, channels, stack, l)
+		err = tc.runInRace(opts, stack, l)
 	default:
-		err = tc.runSequentially(opts, channels, stack, l)
+		err = tc.runSequentially(opts, stack, l)
 	}
 
 	if err != nil {
@@ -48,11 +48,11 @@ func (tc *TaskCollection) Run(opts *runOptions, channels *taskChannels, stack *t
 	return nil
 }
 
-func (tc *TaskCollection) runSequentially(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runSequentially(opts *runOptions, stack *taskStack, l *logger) error {
 	c := make(chan error)
 
 	for _, t := range tc.tasks {
-		go t.run(opts, c, channels, stack, l)
+		go t.run(opts, c, stack, l)
 
 		err := <-c
 
@@ -64,12 +64,12 @@ func (tc *TaskCollection) runSequentially(opts *runOptions, channels *taskChanne
 	return nil
 }
 
-func (tc *TaskCollection) runParallel(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runParallel(opts *runOptions, stack *taskStack, l *logger) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
 		t := tc.tasks[i]
-		go t.run(opts, c, channels, stack, l)
+		go t.run(opts, c, stack, l)
 	}
 
 	for range tc.tasks {
@@ -84,11 +84,11 @@ func (tc *TaskCollection) runParallel(opts *runOptions, channels *taskChannels, 
 	return nil
 }
 
-func (tc *TaskCollection) runInRace(opts *runOptions, channels *taskChannels, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runInRace(opts *runOptions, stack *taskStack, l *logger) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
-		go tc.tasks[i].run(opts, c, channels, stack, l)
+		go tc.tasks[i].run(opts, c, stack, l)
 	}
 
 	defer tc.abort()
