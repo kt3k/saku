@@ -69,14 +69,24 @@ func Run(cwd string, args ...string) ExitCode {
 
 	titles := fc.Args()
 
-	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
+	runOpts := &runOptions{fc: fc}
+	runCtx := &runContext{
+		l:         l,
+		extraArgs: extraArgs,
+		mode:      runOpts.runMode(),
+	}
 
 	if len(titles) == 0 || fc.Bool("info") {
 		actionInfo(tasks)
 		return ExitCodeOk
 	}
 
-	err2 := actionRun(titles, tasks, l, runOpts)
+	if runOpts.isSerialAndParallel() {
+		l.printlnError("both --serial and --parallel options are specified")
+		return ExitCodeError
+	}
+
+	err2 := actionRun(titles, tasks, runCtx)
 
 	if err2 != nil {
 		l.printlnError(err2)

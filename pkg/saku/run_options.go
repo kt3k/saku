@@ -5,9 +5,7 @@ import (
 )
 
 type runOptions struct {
-	cwd       string
-	fc        flags.FlagContext
-	extraArgs []string
+	fc flags.FlagContext
 }
 
 func (r *runOptions) runMode() RunMode {

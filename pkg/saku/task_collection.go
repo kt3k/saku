@@ -26,33 +26,33 @@ func (tc *TaskCollection) SetRunMode(mode RunMode) {
 }
 
 // Run runs the tasks.
-func (tc *TaskCollection) Run(opts *runOptions, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) Run(ctx *runContext, stack *taskStack) error {
 	var err error
-	l.logStart(tc, stack)
+	ctx.l.logStart(tc, stack)
 
 	switch tc.mode {
 	case RunModeParallel:
-		err = tc.runParallel(opts, stack, l)
+		err = tc.runParallel(ctx, stack)
 	case RunModeParallelRace:
-		err = tc.runInRace(opts, stack, l)
+		err = tc.runInRace(ctx, stack)
 	default:
-		err = tc.runSequentially(opts, stack, l)
+		err = tc.runSequentially(ctx, stack)
 	}
 
 	if err != nil {
 		return err
 	}
 
-	l.logEnd(tc, stack)
+	ctx.l.logEnd(tc, stack)
 
 	return nil
 }
 
-func (tc *TaskCollection) runSequentially(opts *runOptions, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runSequentially(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for _, t := range tc.tasks {
-		go t.run(opts, c, stack, l)
+		go t.run(ctx, c, stack)
 
 		err := <-c
 
@@ -64,12 +64,12 @@ func (tc *TaskCollection) runSequentially(opts *runOptions, stack *taskStack, l 
 	return nil
 }
 
-func (tc *TaskCollection) runParallel(opts *runOptions, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runParallel(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
 		t := tc.tasks[i]
-		go t.run(opts, c, stack, l)
+		go t.run(ctx, c, stack)
 	}
 
 	for range tc.tasks {
@@ -84,11 +84,11 @@ func (tc *TaskCollection) runParallel(opts *runOptions, stack *taskStack, l *log
 	return nil
 }
 
-func (tc *TaskCollection) runInRace(opts *runOptions, stack *taskStack, l *logger) error {
+func (tc *TaskCollection) runInRace(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
-		go tc.tasks[i].run(opts, c, stack, l)
+		go tc.tasks[i].run(ctx, c, stack)
 	}
 
 	defer tc.abort()

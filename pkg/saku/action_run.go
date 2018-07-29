@@ -7,11 +7,7 @@ import (
 	"syscall"
 )
 
-func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOptions) error {
-	if runOpts.isSerialAndParallel() {
-		return fmt.Errorf("both --serial and --parallel options are specified")
-	}
-
+func actionRun(titles []string, tasks *TaskCollection, runCtx *runContext) error {
 	for _, title := range titles {
 		if tasks.findByTitle(title) == nil {
 			return fmt.Errorf("Task not defined: %s", title)
@@ -22,7 +18,7 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 	sigs := make(chan os.Signal, 1)
 
 	runTasks := tasks.filterByTitles(titles)
-	runTasks.SetRunMode(runOpts.runMode())
+	runTasks.SetRunMode(runCtx.mode)
 
 	stack := newTaskStack()
 
@@ -37,7 +33,7 @@ func actionRun(titles []string, tasks *TaskCollection, l *logger, runOpts *runOp
 	}()
 
 	go func() {
-		done <- runTasks.Run(runOpts, stack, l)
+		done <- runTasks.Run(runCtx, stack)
 	}()
 
 	return <-done
