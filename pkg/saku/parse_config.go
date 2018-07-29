@@ -1,10 +1,14 @@
 package saku
 
 import (
+	"regexp"
 	"strings"
 
 	"gopkg.in/russross/blackfriday.v2"
 )
+
+var parallelDirective = regexp.MustCompile(`(?ims)<!--\s*saku\s+parallel\s*-->`)
+var parallelRaceDirective = regexp.MustCompile(`(?ims)<!--\s*saku\s+parallel\s+race\s*-->`)
 
 // ParseConfig parses the given config markdown and returns tasks.
 func ParseConfig(config *[]byte) *TaskCollection {
@@ -43,10 +47,29 @@ func ParseConfig(config *[]byte) *TaskCollection {
 					currentTask.addCommands([]string{command})
 				}
 			}
+		} else if node.Type == blackfriday.Paragraph {
+			/* Paragraph > Text or HTMLSpan */
+			n := node.FirstChild
+			for n != nil {
+				checkRunModes(currentTask, n.Literal)
+				n = n.Next
+			}
+		} else if node.Type == blackfriday.HTMLBlock {
+			checkRunModes(currentTask, node.Literal)
 		}
 
 		node = node.Next
 	}
 
 	return tasks
+}
+
+// checkRunModes checks and sets the appropriate run mode to the task.
+func checkRunModes(t *task, text []byte) {
+	if parallelDirective.Match(text) {
+		t.setChildrenRunMode(RunModeParallel)
+	}
+	if parallelRaceDirective.Match(text) {
+		t.setChildrenRunMode(RunModeParallelRace)
+	}
 }

@@ -156,3 +156,6 @@ func TestHierarchicalTask(t *testing.T) {
 		t.Error("Should run hierarchical tasks")
 	}
 }
+
+func TestHierarchicalParallelTask(t *testing.T) {
+}

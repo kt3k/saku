@@ -110,6 +110,7 @@ func (t *task) findByTitle(title string) *task {
 	return t.children.findByTitle(title)
 }
 
+// gotNewTask is the handler when it gets the new task of the given level and title. This is used during the parsing markdown.
 func (t *task) gotNewTask(level int, title string) *task {
 	if t.children == nil {
 		t.children = newTaskCollection()
@@ -124,4 +125,13 @@ func (t *task) taskCount() int {
 	}
 
 	return t.children.taskCount() + 1
+}
+
+// setChildrenRunMode sets the run mode of the childre by the give mode.
+func (t *task) setChildrenRunMode(mode RunMode) {
+	if t.children == nil {
+		t.children = newTaskCollection()
+	}
+
+	t.children.SetRunMode(mode)
 }
