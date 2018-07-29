@@ -20,8 +20,6 @@ func actionRun(titles []string, tasks *TaskCollection, runCtx *runContext) error
 	runTasks := tasks.filterByTitles(titles)
 	runTasks.SetRunMode(runCtx.mode)
 
-	stack := newTaskStack()
-
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 
 	go func() {
@@ -33,7 +31,7 @@ func actionRun(titles []string, tasks *TaskCollection, runCtx *runContext) error
 	}()
 
 	go func() {
-		done <- runTasks.Run(runCtx, stack)
+		done <- runTasks.Run(runCtx, newTaskStack())
 	}()
 
 	return <-done

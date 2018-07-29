@@ -8,10 +8,12 @@ import (
 	"github.com/fatih/color"
 )
 
-func actionInfo(tasks *TaskCollection) {
+func actionInfo(tasks *TaskCollection) error {
 	fmt.Println("There are", color.MagentaString(strconv.Itoa(tasks.taskCount())), "task(s)")
 
 	printTasks(tasks)
+
+	return nil
 }
 
 func printTasks(tasks *TaskCollection) {

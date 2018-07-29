@@ -1,6 +1,8 @@
 package saku
 
 import (
+	"fmt"
+
 	"github.com/fatih/color"
 )
 
@@ -16,25 +18,34 @@ func separateExtraArgs(args []string) ([]string, []string) {
 
 // Run saku command in the given cwd and arguments
 func Run(cwd string, args ...string) ExitCode {
-	runOpts, err := parseRunOptions(args)
-
 	l := &logger{enabled: true}
+
+	err := selectActions(cwd, l, args...)
 
 	if err != nil {
 		l.printlnError(err)
 		return ExitCodeError
 	}
 
+	return ExitCodeOk
+}
+
+// Run saku command in the given cwd and arguments
+func selectActions(cwd string, l *logger, args ...string) error {
+	runOpts, err := parseRunOptions(args)
+
+	if err != nil {
+		return err
+	}
+
 	l.enabled = !runOpts.isQuiet()
 
 	if runOpts.isHelpAction() {
-		actionHelp()
-		return ExitCodeOk
+		return actionHelp()
 	}
 
 	if runOpts.isVersionAction() {
-		actionVersion()
-		return ExitCodeOk
+		return actionVersion()
 	}
 
 	configFile := runOpts.config()
@@ -43,13 +54,10 @@ func Run(cwd string, args ...string) ExitCode {
 
 	if err1 != nil {
 		if configFile != defaultConfigFile {
-			l.printlnError("File not found:", configFile)
-		} else {
-			l.printlnError("File not found:", configFile, "\n  First you need to set up", color.CyanString("saku.md"))
-			l.println("  See", color.MagentaString("https://github.com/kt3k/saku"), "for details")
+			return fmt.Errorf("File not found: " + configFile)
 		}
 
-		return ExitCodeError
+		return fmt.Errorf("File not found: " + configFile + "\n  First you need to set up " + color.CyanString("saku.md") + "\n  See " + color.MagentaString("https://github.com/kt3k/saku") + " for details")
 	}
 
 	tasks := ParseConfig(&config)
@@ -62,21 +70,12 @@ func Run(cwd string, args ...string) ExitCode {
 	}
 
 	if runOpts.isInfoAction() {
-		actionInfo(tasks)
-		return ExitCodeOk
+		return actionInfo(tasks)
 	}
 
 	if runOpts.isSerialAndParallel() {
-		l.printlnError("both --serial and --parallel options are specified")
-		return ExitCodeError
+		return fmt.Errorf("both --serial and --parallel options are specified")
 	}
 
-	err2 := actionRun(titles, tasks, runCtx)
-
-	if err2 != nil {
-		l.printlnError(err2)
-		return ExitCodeError
-	}
-
-	return ExitCodeOk
+	return actionRun(titles, tasks, runCtx)
 }
