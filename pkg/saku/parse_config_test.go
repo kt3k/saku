@@ -1,7 +1,6 @@
 package saku
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -86,8 +85,6 @@ aaa <!-- saku parallel --> bbb
 	if len(baz.children.tasks) != 2 {
 		t.Error("There should be 2 children in baz.")
 	}
-
-	fmt.Printf("%#v", baz)
 
 	if baz.children.mode != RunModeParallel {
 		t.Error("The children of baz should run in parallel")
