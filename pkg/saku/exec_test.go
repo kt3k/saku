@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestTerminateWithNilt(t *testing.T) {
+func TestTerminateWithNil(t *testing.T) {
 	err := terminateCommand(nil)
 
 	if err != nil {

@@ -3,23 +3,33 @@ package saku
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 )
 
-func actionInfo(tasks *TaskCollection) ExitCode {
-	fmt.Println("There are", color.MagentaString(strconv.Itoa(len(tasks.tasks))), "task(s)")
+func actionInfo(tasks *TaskCollection) error {
+	fmt.Println("There are", color.MagentaString(strconv.Itoa(tasks.taskCount())), "task(s)")
 
+	printTasks(tasks)
+
+	return nil
+}
+
+func printTasks(tasks *TaskCollection) {
 	for _, t := range tasks.tasks {
-		fmt.Println("  " + color.CyanString("["+t.title+"]"))
+		indent := strings.Repeat("  ", t.level)
+		fmt.Println(indent + color.CyanString("["+t.title+"]"))
 		if len(t.descriptions) == 0 {
-			fmt.Println("    " + color.New(color.Italic).Sprint("No description"))
+			fmt.Println(indent + "  " + color.New(color.Italic).Sprint("No description"))
 		}
 
 		for _, desc := range t.descriptions {
-			fmt.Println("    " + desc)
+			fmt.Println(indent + "  " + desc)
+		}
+
+		if t.children != nil {
+			printTasks(t.children)
 		}
 	}
-
-	return ExitCodeOk
 }

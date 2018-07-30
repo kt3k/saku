@@ -69,7 +69,7 @@ The above makes the code block of the 2 lines `echo hello` and `echo world`.
 # `saku.md` Rules
 
 - Heading (# title) starts the task definition.
-  - All levels of headings (#, ##, ###,...) has the same effect.
+  - Different levels of headings (#, ##, ###,...) forms the groups of tasks. Tasks of the lower level headings belong to the previous task which has the upper level heading. See below for the details.
 - Code blocks are commands.
   - Code blocks can have multiple commands. They will be executed sequentially.
 - Blockquotes are description of the task.
@@ -104,6 +104,72 @@ This option takes effect only when `-p` option is specified.
 
 ```
 saku -p -r run-server test-server
+```
+
+## Grouping tasks
+
+You can create the group of tasks by the levels of headings.
+
+For example:
+
+````markdown
+# foo
+
+## bar
+
+    echo bar
+
+## baz
+
+    echo baz
+````
+
+This defines 3 task `foo`, `bar` and `baz`. `foo` becomes the parent of `bar` and `baz`. So when you invoke `saku foo`, it executes both `bar` and `baz`:
+
+```console
+$ saku foo
+[saku] Run foo
+[saku] foo > Run bar, baz in sequence
++echo bar
+bar
++echo baz
+baz
+[saku] foo > Finish bar, baz in sequence
+[saku] ✨  Finish foo
+```
+
+The tasks of the lower level headings belong to the upper level heading and which forms the groups of tasks.
+
+## Use parallel in task grouping
+
+If you need to run the children tasks in parallel, you can use `<!-- saku parallel -->` directive in the parents' contents:
+
+````markdown
+# foo
+
+<!-- saku parallel -->
+
+## bar
+
+    echo bar
+
+## baz
+
+    echo baz
+````
+
+This executes `bar` and `baz` in parallel:
+
+```
+$ saku foo
+[saku] Run foo
+[saku] foo > Run bar, baz in parallel
++echo bar
++echo baz
+bar
+baz
+[saku] foo > Finish bar, baz in parallel
+[saku] ✨  Finish foo
 ```
 
 ## Nesting tasks (Dependency of tasks)

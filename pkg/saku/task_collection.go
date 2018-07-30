@@ -1,43 +1,58 @@
 package saku
 
+import (
+	"github.com/jinzhu/copier"
+)
+
 // TaskCollection is the model of the list of tasks.
 type TaskCollection struct {
-	currentTask *task
-	tasks       []*task
-	taskMap     map[string]*task
-	onCommand   chan string
+	tasks   []*task
+	taskMap map[string]*task
+	mode    RunMode
 }
 
 // Creates a new task collection.
 func newTaskCollection() *TaskCollection {
-
-	// This is a dummy task, and will be discarded when the first task is created
-	t := newTask()
-
 	return &TaskCollection{
-		currentTask: &t,
-		tasks:       []*task{},
-		taskMap:     map[string]*task{},
-		onCommand:   make(chan string, 1),
+		tasks:   []*task{},
+		taskMap: map[string]*task{},
+		mode:    RunModeSequence,
 	}
+}
+
+// SetRunMode sets the run mode of the collection.
+func (tc *TaskCollection) SetRunMode(mode RunMode) {
+	tc.mode = mode
 }
 
 // Run runs the tasks.
-func (tc *TaskCollection) Run(opts *runOptions) error {
-	if opts.isParallel() {
-		return tc.runParallel(opts)
-	} else if opts.isRace() {
-		return tc.runInRace(opts)
+func (tc *TaskCollection) Run(ctx *runContext, stack *taskStack) error {
+	var err error
+	ctx.l.logStart(tc, stack)
+
+	switch tc.mode {
+	case RunModeParallel:
+		err = tc.runParallel(ctx, stack)
+	case RunModeParallelRace:
+		err = tc.runInRace(ctx, stack)
+	default:
+		err = tc.runSequentially(ctx, stack)
 	}
 
-	return tc.runSequentially(opts)
+	if err != nil {
+		return err
+	}
+
+	ctx.l.logEnd(tc, stack)
+
+	return nil
 }
 
-func (tc *TaskCollection) runSequentially(opts *runOptions) error {
+func (tc *TaskCollection) runSequentially(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for _, t := range tc.tasks {
-		go t.run(opts, c, tc.onCommand)
+		go t.run(ctx, c, stack)
 
 		err := <-c
 
@@ -49,12 +64,12 @@ func (tc *TaskCollection) runSequentially(opts *runOptions) error {
 	return nil
 }
 
-func (tc *TaskCollection) runParallel(opts *runOptions) error {
+func (tc *TaskCollection) runParallel(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
 		t := tc.tasks[i]
-		go t.run(opts, c, tc.onCommand)
+		go t.run(ctx, c, stack)
 	}
 
 	for range tc.tasks {
@@ -69,11 +84,11 @@ func (tc *TaskCollection) runParallel(opts *runOptions) error {
 	return nil
 }
 
-func (tc *TaskCollection) runInRace(opts *runOptions) error {
+func (tc *TaskCollection) runInRace(ctx *runContext, stack *taskStack) error {
 	c := make(chan error)
 
 	for i := range tc.tasks {
-		go tc.tasks[i].run(opts, c, tc.onCommand)
+		go tc.tasks[i].run(ctx, c, stack)
 	}
 
 	defer tc.abort()
@@ -87,45 +102,79 @@ func (tc *TaskCollection) abort() {
 	}
 }
 
-func (tc *TaskCollection) newTask() {
-	t := newTask()
-	tc.tasks = append(tc.tasks, &t)
-	tc.currentTask = &t
+// appendNewTask appends a new task of the given level.
+func (tc *TaskCollection) appendNewTask(level int, title string) *task {
+	t := newTask(level)
+	t.setTitle(title)
+	tc.tasks = append(tc.tasks, t)
+	tc.taskMap[title] = t
+	return t
 }
 
-func (tc *TaskCollection) setCurrentTaskTitle(title string) {
-	tc.currentTask.setTitle(title)
-	tc.taskMap[title] = tc.currentTask
+func (tc *TaskCollection) gotNewTask(level int, title string) *task {
+	if tc.isEmpty() || tc.lastTask().level >= level {
+		return tc.appendNewTask(level, title)
+	}
+
+	return tc.lastTask().gotNewTask(level, title)
 }
 
-func (tc *TaskCollection) addCurrentTaskDescription(description string) {
-	tc.currentTask.addDescription(description)
+func (tc *TaskCollection) isEmpty() bool {
+	return len(tc.tasks) == 0
 }
 
-func (tc *TaskCollection) addCurrentTaskCommands(commands []string) {
-	tc.currentTask.addCommands(commands)
+func (tc *TaskCollection) lastTask() *task {
+	return tc.tasks[len(tc.tasks)-1]
 }
 
+func (tc *TaskCollection) findByTitle(title string) *task {
+	for _, t := range tc.tasks {
+		found := t.findByTitle(title)
+
+		if found != nil {
+			return found
+		}
+	}
+
+	return nil
+}
+
+// filterByTitles filters the task by the given titles and returns a new task collection. The tasks in the returned collection is cloned from the original tasks.
 func (tc *TaskCollection) filterByTitles(titles []string) *TaskCollection {
 	tasks := []*task{}
 	taskMap := map[string]*task{}
 
 	for _, title := range titles {
-		tasks = append(tasks, tc.taskMap[title])
-		taskMap[title] = tc.taskMap[title]
+		t0 := newTask(0)
+		t1 := tc.findByTitle(title)
+		copier.Copy(t0, t1)
+		tasks = append(tasks, t0)
+		taskMap[title] = t0
 	}
 
 	return &TaskCollection{
-		currentTask: tasks[len(tasks)-1],
-		tasks:       tasks,
-		taskMap:     taskMap,
-		onCommand:   tc.onCommand,
+		tasks:   tasks,
+		taskMap: taskMap,
+		mode:    tc.mode,
 	}
 }
 
-// Gets a task by the given title.
-func (tc *TaskCollection) getByTitle(title string) (*task, bool) {
-	t, ok := tc.taskMap[title]
+func (tc *TaskCollection) titles() []string {
+	titles := []string{}
 
-	return t, ok
+	for _, t := range tc.tasks {
+		titles = append(titles, t.title)
+	}
+
+	return titles
+}
+
+func (tc *TaskCollection) taskCount() int {
+	c := 0
+
+	for _, t := range tc.tasks {
+		c += t.taskCount()
+	}
+
+	return c
 }

@@ -7,7 +7,7 @@ import (
 )
 
 // Shows the help message.
-func actionHelp() ExitCode {
+func actionHelp() error {
 	fmt.Printf(`
   Usage: %s [options] <task, ...> [-- extra-options]
 
@@ -27,5 +27,5 @@ func actionHelp() ExitCode {
 
 `, color.CyanString("saku"))
 
-	return ExitCodeOk
+	return nil
 }

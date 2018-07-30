@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
-	"github.com/simonleung8/flags"
 )
 
 func separateExtraArgs(args []string) ([]string, []string) {
@@ -19,61 +18,64 @@ func separateExtraArgs(args []string) ([]string, []string) {
 
 // Run saku command in the given cwd and arguments
 func Run(cwd string, args ...string) ExitCode {
-	fc := flags.New()
+	l := &logger{enabled: true}
 
-	fc.NewBoolFlag("help", "h", "Show the help message and exits.")
-	fc.NewBoolFlag("version", "v", "")
-	fc.NewBoolFlag("parallel", "p", "Runs tasks in parallel.")
-	fc.NewBoolFlag("race", "r", "")
-	fc.NewBoolFlag("serial", "s", "")
-	fc.NewBoolFlag("info", "i", "")
-	fc.NewBoolFlag("quiet", "q", "")
-	fc.NewStringFlagWithDefault("config", "c", "", defaultConfigFile)
-
-	mainArgs, extraArgs := separateExtraArgs(args)
-
-	err := fc.Parse(mainArgs...)
+	err := selectActions(cwd, l, args...)
 
 	if err != nil {
-		fmt.Println(color.RedString("Error:"), err)
+		l.printlnError(err)
 		return ExitCodeError
 	}
 
-	if fc.Bool("help") {
+	return ExitCodeOk
+}
+
+// Run saku command in the given cwd and arguments
+func selectActions(cwd string, l *logger, args ...string) error {
+	runOpts, err := parseRunOptions(args)
+
+	if err != nil {
+		return err
+	}
+
+	l.enabled = !runOpts.isQuiet()
+
+	if runOpts.isHelpAction() {
 		return actionHelp()
 	}
 
-	if fc.Bool("version") {
+	if runOpts.isVersionAction() {
 		return actionVersion()
 	}
 
-	l := &logger{enabled: !fc.Bool("quiet")}
-
-	configFile := fc.String("config")
+	configFile := runOpts.config()
 
 	config, err1 := readConfig(cwd, configFile, l)
 
 	if err1 != nil {
 		if configFile != defaultConfigFile {
-			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
-		} else {
-			fmt.Println(color.RedString("Error:"), "File not found:", configFile)
-			fmt.Println("  First you need to set up", color.CyanString("saku.md"))
-			fmt.Println("  See", color.MagentaString("https://github.com/kt3k/saku"), "for details")
+			return fmt.Errorf("File not found: " + configFile)
 		}
 
-		return ExitCodeError
+		return fmt.Errorf("File not found: " + configFile + "\n  First you need to set up " + color.CyanString("saku.md") + "\n  See " + color.MagentaString("https://github.com/kt3k/saku") + " for details")
 	}
 
 	tasks := ParseConfig(&config)
 
-	titles := fc.Args()
+	titles := runOpts.titles()
+	runCtx := &runContext{
+		l:         l,
+		extraArgs: runOpts.extraArgs,
+		mode:      runOpts.runMode(),
+	}
 
-	runOpts := &runOptions{cwd: "", fc: fc, extraArgs: extraArgs}
-
-	if len(titles) == 0 || fc.Bool("info") {
+	if runOpts.isInfoAction() {
 		return actionInfo(tasks)
 	}
 
-	return actionRun(titles, tasks, l, runOpts)
+	if runOpts.isSerialAndParallel() {
+		return fmt.Errorf("both --serial and --parallel options are specified")
+	}
+
+	return actionRun(titles, tasks, runCtx)
 }
