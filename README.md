@@ -160,7 +160,7 @@ If you need to run the children tasks in parallel, you can use `<!-- saku parall
 
 This executes `bar` and `baz` in parallel:
 
-```
+```console
 $ saku foo
 [saku] Run foo
 [saku] foo > Run bar, baz in parallel
