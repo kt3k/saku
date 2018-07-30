@@ -31,14 +31,16 @@
     go fmt
 
 # cov
-> Creates the coverage data
+> Creates and opens the coverage report
+
+## cov-data
+> Runs tests and creates coverage data.
 
     cd pkg/saku; go test -coverprofile=coverage.txt -covermode=atomic .
 
-# cov-html
+## cov-html
 > Creates the html coverage report
 
-    saku cov
     go tool cover -html=pkg/saku/coverage.txt
 
 # chglog
