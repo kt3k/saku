@@ -276,6 +276,10 @@ Saku is the Japanese name for the Chinese character "作", which means "make". S
 - yaml-based tools
   - [robo][]
   - [go-task][]
+  
+# Who use saku?
+
+See [this search](https://github.com/search?q=filename%3A%22saku.md%22+-org%3Akt3k&type=Code).
 
 # [CHANGELOG](https://github.com/kt3k/saku/blob/master/CHANGELOG.md)
 
