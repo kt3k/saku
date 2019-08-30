@@ -1,16 +1,23 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/kt3k/saku
+    environment:
+      GOPATH: /
+      GOCACHE: /.cache/go-build
+      GO111MODULE: on
+    working_directory: /workspace
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/golang:1.11
     steps:
       - checkout
       - restore_cache:
-          key: v1
+          key:
+            - v1-{{ checksum "/workspace/go.sum" }}
+            - v1-
+
       - run: cd pkg/saku; go test -tags coverage -coverprofile=coverage.txt -covermode=atomic .
       - save_cache:
-          key: v1
+          key: v1-{{ checksum "/workspace/go.sum" }}
           paths:
-            - "/go/pkg"
+            - "/workspace"
       - run: bash <(curl -s https://codecov.io/bash)
