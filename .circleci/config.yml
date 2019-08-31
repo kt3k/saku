@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/golang:1.11
         environment:
-          GO111MODULE: on
+          GO111MODULE: "on"
     steps:
       - checkout
       - restore_cache:

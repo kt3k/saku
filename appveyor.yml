@@ -1,11 +1,10 @@
 clone_folder: c:\gopath\src\github.com\kt3k\saku
 
 environment:
-  GOPATH: c:\gopath
+  GO111MODULE: "on"
 
 build: off
 deploy: off
 
 test_script:
-  - cd pkg\saku
-  - go test -v .
+  - go test ./pkg/saku
