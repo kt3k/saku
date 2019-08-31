@@ -36,7 +36,7 @@
 ## cov-data
 > Runs tests and creates coverage data.
 
-    cd pkg/saku; go test -coverprofile=coverage.txt -covermode=atomic .
+    go test -coverprofile=coverage.txt -covermode=atomic ./pkg/saku
 
 ## cov-html
 > Creates the html coverage report
