@@ -1,14 +1,12 @@
 package saku
 
 import (
-	"fmt"
-
 	"github.com/fatih/color"
 )
 
 // Shows the help message.
 func actionHelp() error {
-	fmt.Printf(`
+	colorablePrintf(`
   Usage: %s [options] <task, ...> [-- extra-options]
 
   Options:

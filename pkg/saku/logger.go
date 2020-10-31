@@ -1,7 +1,6 @@
 package saku
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/fatih/color"
@@ -13,19 +12,19 @@ type logger struct {
 
 func (l *logger) print(a ...interface{}) {
 	if l.enabled {
-		fmt.Print(a...)
+		colorablePrint(a...)
 	}
 }
 
 func (l *logger) println(a ...interface{}) {
 	if l.enabled {
-		fmt.Println(a...)
+		colorablePrintln(a...)
 	}
 }
 
 func (l *logger) printlnError(a ...interface{}) {
-	fmt.Print(color.RedString("Error:"), " ")
-	fmt.Println(a...)
+	colorablePrint(color.RedString("Error:"), " ")
+	colorablePrintln(a...)
 }
 
 // logLine logs a line of saku's phase message.

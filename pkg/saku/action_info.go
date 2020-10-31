@@ -1,7 +1,6 @@
 package saku
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 )
 
 func actionInfo(tasks *TaskCollection) error {
-	fmt.Println("There are", color.MagentaString(strconv.Itoa(tasks.taskCount())), "task(s)")
+	colorablePrintln("There are", color.MagentaString(strconv.Itoa(tasks.taskCount())), "task(s)")
 
 	printTasks(tasks)
 
@@ -19,13 +18,13 @@ func actionInfo(tasks *TaskCollection) error {
 func printTasks(tasks *TaskCollection) {
 	for _, t := range tasks.tasks {
 		indent := strings.Repeat("  ", t.level)
-		fmt.Println(indent + color.CyanString("["+t.title+"]"))
+		colorablePrintln(indent + color.CyanString("["+t.title+"]"))
 		if len(t.descriptions) == 0 {
-			fmt.Println(indent + "  " + color.New(color.Italic).Sprint("No description"))
+			colorablePrintln(indent + "  " + color.New(color.Italic).Sprint("No description"))
 		}
 
 		for _, desc := range t.descriptions {
-			fmt.Println(indent + "  " + desc)
+			colorablePrintln(indent + "  " + desc)
 		}
 
 		if t.children != nil {
