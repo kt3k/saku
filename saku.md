@@ -18,7 +18,7 @@
     saku clean
     goreleaser
     git clone https://github.com/kt3k/homebrew-tap.git
-    cd homebrew-tap; ./update_saku.sh 1.2.0 ; git commit -a -m "update saku (1.2.0)" ; git push origin head
+    cd homebrew-tap; ./update_saku.sh 1.2.1 ; git commit -a -m "update saku (1.2.1)" ; git push origin head
 
 # test
 > Runs the tests
@@ -46,4 +46,4 @@
 # chglog
 > Creates the change log
 
-    git-chglog --next-tag v1.2.0 -o CHANGELOG.md
+    git-chglog --next-tag v1.2.1 -o CHANGELOG.md

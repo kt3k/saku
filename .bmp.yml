@@ -1,12 +1,12 @@
 ---
-version: 1.2.0
-commit: ':bookmark: chore: bump to version %.%.%'
+version: 1.2.1
+commit: ":bookmark: chore: bump to version %.%.%"
 files:
   README.md:
   - saku (作) v%.%.%
   - https://github.com/kt3k/saku/releases/tag/v%.%.%
-  pkg/saku/const.go: '%.%.%'
+  pkg/saku/const.go: "%.%.%"
   saku.md:
-  - ./update_saku.sh %.%.%
+  - "./update_saku.sh %.%.%"
   - update saku (%.%.%)
-  - --next-tag v%.%.%
+  - "--next-tag v%.%.%"
