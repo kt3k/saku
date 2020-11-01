@@ -1,12 +1,28 @@
 package saku
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 )
+
+var colorableStdout = colorable.NewColorableStdout()
+
+func colorablePrint(a ...interface{}) (n int, err error) {
+	return fmt.Fprint(colorableStdout, a...)
+}
+
+func colorablePrintf(format string, a ...interface{}) (n int, err error) {
+	return fmt.Fprintf(colorableStdout, format, a...)
+}
+
+func colorablePrintln(a ...interface{}) (n int, err error) {
+	return fmt.Fprintln(colorableStdout, a...)
+}
 
 func emojiEnabled() bool {
 	return isatty.IsTerminal(os.Stdout.Fd())
