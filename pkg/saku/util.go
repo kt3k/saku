@@ -1,8 +1,11 @@
 package saku
 
 import (
-	"github.com/mattn/go-isatty"
+	"io/ioutil"
 	"os"
+	"strings"
+
+	"github.com/mattn/go-isatty"
 )
 
 func emojiEnabled() bool {
@@ -21,4 +24,13 @@ func prependEmoji(e string, str string, useEmoji bool) string {
 // Returns true if the process is invoked in saku.
 func invokedInSaku() bool {
 	return os.Getenv("IN_SAKU") == "true"
+}
+
+func forceLfReadFile(filename string) ([]byte, error) {
+	content, err := ioutil.ReadFile(filename)
+	content = []byte(strings.NewReplacer(
+		"\r\n", "\n",
+		"\r", "\n",
+	).Replace(string(content)))
+	return content, err
 }

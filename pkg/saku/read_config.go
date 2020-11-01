@@ -2,7 +2,6 @@ package saku
 
 import (
 	"errors"
-	"io/ioutil"
 	"path/filepath"
 	"regexp"
 
@@ -17,7 +16,7 @@ var patternEmbedDirective = regexp.MustCompile(`(?ism)<!--\s*saku\s+start\s*-->(
 func readConfig(cwd string, configFile string, l *logger) ([]byte, error) {
 	absPath := filepath.Join(cwd, configFile)
 
-	data, err := ioutil.ReadFile(absPath)
+	data, err := forceLfReadFile(absPath)
 
 	if err == nil {
 		printReading(absPath, l)
@@ -29,7 +28,7 @@ func readConfig(cwd string, configFile string, l *logger) ([]byte, error) {
 	}
 
 	absPath = filepath.Join(cwd, "README.md")
-	data, err = ioutil.ReadFile(absPath)
+	data, err = forceLfReadFile(absPath)
 
 	if err != nil {
 		return []byte{}, err
