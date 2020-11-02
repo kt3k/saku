@@ -12,6 +12,7 @@ import (
 func execCommand(command string) *exec.Cmd {
 	cmd := exec.Command("/bin/sh", "-c", command)
 
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.SysProcAttr = &syscall.SysProcAttr{}

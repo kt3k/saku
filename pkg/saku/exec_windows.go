@@ -12,6 +12,7 @@ import (
 func execCommand(command string) *exec.Cmd {
 	cmd := exec.Command("cmd.exe", "/s", "/c", command)
 
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "IN_SAKU=true")
